@@ -1,6 +1,6 @@
 <div class="sidebar" data-color="azure" data-background-color="white" data-image="../../assets/img/sidebar-1.jpg">
     <div class="logo"><a href="" class="simple-text logo-mini">
-        SC
+        AT
       </a>
       <a href="" class="simple-text logo-normal">
         SYSTEM
