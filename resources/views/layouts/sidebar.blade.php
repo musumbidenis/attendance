@@ -48,7 +48,7 @@
           </a>
         </li>
 
-        <li class="nav-item active ">
+        <li class="nav-item {{ Request::path() == '/users/tutors' || Request::path() == '/academics/units' ? 'active' : '' }} ">
           <a class="nav-link" data-toggle="collapse" href="#users">
             <i class="material-icons">supervised_user_circle</i>
             <p> Users
@@ -73,7 +73,7 @@
           </div>
         </li>
 
-        <li class="nav-item ">
+        <li class="nav-item {{ Request::path() == '/academics/courses' || Request::path() == '/academics/units' ? 'active' : '' }} ">
           <a class="nav-link" data-toggle="collapse" href="#academics">
             <i class="material-icons">school</i>
             <p> Academics
