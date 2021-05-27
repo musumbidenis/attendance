@@ -20,11 +20,8 @@
 <body class="sidebar-mini">
     <div class="wrapper ">
         <div class="main-panel">
-            <!-- Sidebar -->
             @include('layouts.sidebar')
-            <!-- Body content -->
             @yield('content')
-
         </div>
     </div>
     <!--   Core JS Files   -->
@@ -32,9 +29,9 @@
     <script src="../assets/js/core/popper.min.js"></script>
     <script src="../assets/js/core/bootstrap-material-design.min.js"></script>
     <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-    <!-- Plugin for the momentJs  -->
-    <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
+    <!-- Control Center for Material Dashboard: parallax effects, scripts  -->
     <script src="../assets/js/material-dashboard.js?v=2.1.2" type="text/javascript"></script>
+    @yield('scripts')
     <script>
         $(document).ready(function() {
         $().ready(function() {
