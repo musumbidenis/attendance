@@ -19,3 +19,6 @@ Route::get('/', function () {
 Route::get('/users/tutors', function () {
     return view('pages.tutors');
 });
+Route::get('/users/students', function () {
+    return view('pages.students');
+});
