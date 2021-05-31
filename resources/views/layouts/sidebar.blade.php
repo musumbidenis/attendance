@@ -56,7 +56,7 @@
                       <b class="caret"></b>
                     </p>
                   </a>
-                  <div class="collapse" id="users">
+                  <div class="collapse {{ Request::path() == 'users/tutors' || Request::path() == 'users/students' ? 'show' : '' }}" id="users">
                     <ul class="nav">
                       <li class="nav-item {{ Request::path() == 'users/tutors' ? 'active' : '' }} ">
                         <a class="nav-link" href="/users/tutors">
@@ -81,7 +81,7 @@
                       <b class="caret"></b>
                     </p>
                   </a>
-                  <div class="collapse" id="academics">
+                  <div class="collapse {{ Request::path() == 'academics/courses' || Request::path() == 'academics/units' ? 'show' : '' }}" id="academics">
                     <ul class="nav">
                       <li class="nav-item {{ Request::path() == 'academics/courses' ? 'active' : '' }} ">
                         <a class="nav-link" href="/academics/courses">
@@ -99,14 +99,14 @@
                   </div>
                 </li>
 
-                <li class="nav-item ">
+                <li class="nav-item {{ Request::path() == 'attendances/tutors' || Request::path() == 'attendances/students' ? 'active' : '' }}">
                   <a class="nav-link" data-toggle="collapse" href="#attendances">
                     <i class="material-icons">list_alt</i>
                     <p> Attendances
                       <b class="caret"></b>
                     </p>
                   </a>
-                  <div class="collapse" id="attendances">
+                  <div class="collapse {{ Request::path() == 'attendances/tutors' || Request::path() == 'attendances/students' ? 'show' : '' }}" id="attendances">
                     <ul class="nav">
                       <li class="nav-item {{ Request::path() == 'attendances/tutors' ? 'active' : '' }} ">
                         <a class="nav-link" href="/attendances/tutors">
