@@ -22,7 +22,3 @@ Route::get('/users/tutors', function () {
 Route::get('/users/students', function () {
     return view('pages.students');
 });
-
-Route::get('/test', function () {
-    return view('pages.test');
-});
