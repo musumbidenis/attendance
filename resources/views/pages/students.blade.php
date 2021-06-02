@@ -1,5 +1,6 @@
 @extends('layouts.main')
   @section('content')
+  
           <div class="content">
             <div class="container-fluid">
               <div class="row">
@@ -26,25 +27,42 @@
                     </ul>
                     <div class="tab-content tab-space tab-subcategories">
 
-
-                      <div class="tab-pane active" id="stats">
-                        <div class="card">
-                          <div class="card-header">
-                            <h4 class="card-title">Location of the product</h4>
-                            <p class="card-category">
-                              More information here
-                            </p>
-                          </div>
-                          <div class="card-body">
-                            Efficiently unleash cross-media information without cross-media value. Quickly maximize timely deliverables for real-time schemas.
-                            <br>
-                            <br> Dramatically maintain clicks-and-mortar solutions without functional solutions.
+                      <div class="tab-pane" id="stats">
+                        <div class="content">
+                          <div class="container-fluid">
+                            <div class="row">
+                              <div class="col-md-5">
+                                <div class="card card-chart">
+                                  <div class="card-header card-header-icon card-header-danger">
+                                    <div class="card-icon">
+                                      <i class="material-icons">pie_chart</i>
+                                    </div>
+                                    <h4 class="card-title">Pie Chart</h4>
+                                  </div>
+                                  <div class="card-body">
+                                    <div id="chartPreferences" class="ct-chart"></div>
+                                  </div>
+                                  <div class="card-footer">
+                                    <div class="row">
+                                      <div class="col-md-12">
+                                        <h6 class="card-category">Legend</h6>
+                                      </div>
+                                      <div class="col-md-12">
+                                        <i class="fa fa-circle text-info"></i> Apple
+                                        <i class="fa fa-circle text-warning"></i> Samsung
+                                        <i class="fa fa-circle text-danger"></i> Windows Phone
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
 
 
-                      <div class="tab-pane" id="search">
+                      <div class="tab-pane active" id="search">
                         <div class="content">
                           <div class="container-fluid">
                             <div class="row">
@@ -190,19 +208,49 @@
                         </div>
                       </div>
 
-
                       <div class="tab-pane" id="new">
-                        <div class="card">
-                          <div class="card-header">
-                            <h4 class="card-title">Legal info of the product</h4>
-                            <p class="card-category">
-                              More information here
-                            </p>
-                          </div>
-                          <div class="card-body">
-                            Completely synergize resource taxing relationships via premier niche markets. Professionally cultivate one-to-one customer service with robust ideas.
-                            <br>
-                            <br>Dynamically innovate resource-leveling customer service for state of the art customer service.
+                        <div class="content">
+                          <div class="container-fluid">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <form id="RegisterValidation" action="" method="">
+                                  <div class="card ">
+                                    <div class="card-header card-header-rose card-header-icon">
+                                      <div class="card-icon">
+                                        <i class="material-icons">mail_outline</i>
+                                      </div>
+                                      <h4 class="card-title">Register Form</h4>
+                                    </div>
+                                    <div class="card-body ">
+                                      <div class="form-group">
+                                        <label for="exampleEmail" class="bmd-label-floating"> Email Address *</label>
+                                        <input type="email" class="form-control" id="exampleEmail" required="true">
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="examplePassword" class="bmd-label-floating"> Password *</label>
+                                        <input type="password" class="form-control" id="examplePassword" required="true" name="password">
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="examplePassword1" class="bmd-label-floating"> Confirm Password *</label>
+                                        <input type="password" class="form-control" id="examplePassword1" required="true" equalTo="#examplePassword" name="password_confirmation">
+                                      </div>
+                                      <div class="category form-category">* Required fields</div>
+                                    </div>
+                                    <div class="card-footer text-right">
+                                      <div class="form-check mr-auto">
+                                        <label class="form-check-label">
+                                          <input class="form-check-input" type="checkbox" value="" required> Subscribe to newsletter
+                                          <span class="form-check-sign">
+                                            <span class="check"></span>
+                                          </span>
+                                        </label>
+                                      </div>
+                                      <button type="submit" class="btn btn-rose">Register</button>
+                                    </div>
+                                  </div>
+                                </form>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -217,6 +265,30 @@
   @endsection
 @section('scripts')
 <script src="../../assets/js/plugins/jquery.dataTables.min.js"></script>
+    <script>
+      function setFormValidation(id) {
+        $(id).validate({
+          highlight: function(element) {
+            $(element).closest('.form-group').removeClass('has-success').addClass('has-danger');
+            $(element).closest('.form-check').removeClass('has-success').addClass('has-danger');
+          },
+          success: function(element) {
+            $(element).closest('.form-group').removeClass('has-danger').addClass('has-success');
+            $(element).closest('.form-check').removeClass('has-danger').addClass('has-success');
+          },
+          errorPlacement: function(error, element) {
+            $(element).closest('.form-group').append(error);
+          },
+        });
+      }
+
+      $(document).ready(function() {
+        setFormValidation('#RegisterValidation');
+        setFormValidation('#TypeValidation');
+        setFormValidation('#LoginValidation');
+        setFormValidation('#RangeValidation');
+      });
+    </script>
     <script>
       $(document).ready(function() {
         $('#datatables').DataTable({
