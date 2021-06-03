@@ -265,6 +265,7 @@
   @endsection
 @section('scripts')
 <script src="../../assets/js/plugins/jquery.dataTables.min.js"></script>
+<script src="../../assets/js/plugins/jquery.validate.min.js"></script>
     <script>
       function setFormValidation(id) {
         $(id).validate({
@@ -284,9 +285,6 @@
 
       $(document).ready(function() {
         setFormValidation('#RegisterValidation');
-        setFormValidation('#TypeValidation');
-        setFormValidation('#LoginValidation');
-        setFormValidation('#RangeValidation');
       });
     </script>
     <script>
