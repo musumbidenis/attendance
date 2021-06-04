@@ -15,12 +15,12 @@
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link active" data-toggle="tab" href="#search" role="tablist">
+                        <a class="nav-link" data-toggle="tab" href="#search" role="tablist">
                           <i class="material-icons">search</i> Search
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#new" role="tablist">
+                        <a class="nav-link active" data-toggle="tab" href="#new" role="tablist">
                           <i class="material-icons">person_add</i> New Student
                         </a>
                       </li>
@@ -59,7 +59,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="tab-pane active" id="search">
+                      <div class="tab-pane" id="search">
                         <div class="content">
                           <div class="container-fluid">
                             <div class="row">
@@ -132,11 +132,11 @@
                           </div>
                         </div>
                       </div>
-                      <div class="tab-pane" id="new">
+                      <div class="tab-pane active" id="new">
                         <div class="content">
                           <div class="container-fluid">
                             <div class="row">
-                              <div class="col-md-6 ml-auto mr-auto">
+                              <div class="col-md-6">
                                 <form id="addStudent" action="" method="">
 
                                   <div class="card ">
