@@ -21,7 +21,7 @@
     <div class="wrapper ">
         <div class="main-panel">
             @include('layouts.sidebar')
-
+            
             @yield('content')
         </div>
     </div>
