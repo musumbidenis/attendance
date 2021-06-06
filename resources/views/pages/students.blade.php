@@ -46,11 +46,6 @@
                                       <div class="col-md-12">
                                         <h6 class="card-category">Legend</h6>
                                       </div>
-                                      <div class="col-md-12">
-                                        <i class="fa fa-circle text-info"></i> Apple
-                                        <i class="fa fa-circle text-warning"></i> Samsung
-                                        <i class="fa fa-circle text-danger"></i> Windows Phone
-                                      </div>
                                     </div>
                                   </div>
                                 </div>
