@@ -27,7 +27,7 @@
                     </ul>
                     <div class="tab-content tab-space tab-subcategories">
                       <div class="tab-pane" id="stats">
-                        <div class="content">
+                        {{-- <div class="content">
                           <div class="container-fluid">
                             <div class="row">
                               <div class="col-md-5">
@@ -52,7 +52,28 @@
                               </div>
                             </div>
                           </div>
-                        </div>
+                        </div> --}}
+
+                        <form method="post" enctype="multipart/form-data" action="{{ url('/students/import') }}">
+                          {{ csrf_field() }}
+                          <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                            <div class="fileinput-new thumbnail">
+                              <img src="../../assets/img/image_placeholder.jpg" alt="...">
+                            </div>
+                            <div class="fileinput-preview fileinput-exists thumbnail"></div>
+                            <div>
+                              <span class="btn btn-rose btn-round btn-file">
+                                <span class="fileinput-new">Select image</span>
+                                <span class="fileinput-exists">Change</span>
+                                <input type="file" name="data" />
+                              </span>
+                              <a href="#pablo" class="btn btn-danger btn-round fileinput-exists" data-dismiss="fileinput"><i class="fa fa-times"></i> Remove</a>
+                            </div>
+                          </div>
+                          <input type="submit" name="upload" class="btn btn-primary" value="Upload">
+                         </form>
+
+
                       </div>
                       <div class="tab-pane" id="search">
                         <div class="content">

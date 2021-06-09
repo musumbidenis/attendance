@@ -22,3 +22,4 @@ Route::get('/users/tutors', function () {
 Route::get('/users/students', function () {
     return view('pages.students');
 });
+Route::post('/students/import', 'StudentsController@import');
