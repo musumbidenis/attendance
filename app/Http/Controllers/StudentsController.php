@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Students;
+use App\Imports\StudentImports;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -43,30 +44,9 @@ class StudentsController extends Controller
       
            $path = $request->file('data')->getRealPath();
       
-           $data = Excel::import($path);
-      
-           if($data->count() > 0)
-           {
-            foreach($data->toArray() as $key => $value)
-            {
-             foreach($value as $row)
-             {
-              $insert_data[] = array(
-               'studentId'  => $row['Student Id'],
-               'firstname'   => $row['First Name'],
-               'surname'   => $row['Surname'],
-               'email'    => $row['Email'],
-               'phone'  => $row['Phone'],
-               'courseCode'   => $row['Course Code']
-              );
-             }
-            }
-      
-            if(!empty($insert_data))
-            {
-             DB::table('students')->insert($insert_data);
-            }
-           }
+           $data = Excel::import(new StudentImports ,$request->file('data'));
+   
+           
            return back()->with('success', 'Excel Data Imported successfully.');
           }
     }
