@@ -27,7 +27,7 @@
                     </ul>
                     <div class="tab-content tab-space tab-subcategories">
                       <div class="tab-pane" id="stats">
-                        {{-- <div class="content">
+                        <div class="content">
                           <div class="container-fluid">
                             <div class="row">
                               <div class="col-md-5">
@@ -52,28 +52,7 @@
                               </div>
                             </div>
                           </div>
-                        </div> --}}
-
-                        <form method="post" enctype="multipart/form-data" action="{{ url('/students/import') }}">
-                          {{ csrf_field() }}
-                          <div class="fileinput fileinput-new text-center" data-provides="fileinput">
-                            <div class="fileinput-new thumbnail">
-                              <img src="../../assets/img/image_placeholder.jpg" alt="...">
-                            </div>
-                            <div class="fileinput-preview fileinput-exists thumbnail"></div>
-                            <div>
-                              <span class="btn btn-rose btn-round btn-file">
-                                <span class="fileinput-new">Select image</span>
-                                <span class="fileinput-exists">Change</span>
-                                <input type="file" name="data" />
-                              </span>
-                              <a href="#pablo" class="btn btn-danger btn-round fileinput-exists" data-dismiss="fileinput"><i class="fa fa-times"></i> Remove</a>
-                            </div>
-                          </div>
-                          <input type="submit" name="upload" class="btn btn-primary" value="Upload">
-                         </form>
-
-
+                        </div>
                       </div>
                       <div class="tab-pane" id="search">
                         <div class="content">
@@ -152,45 +131,63 @@
                         <div class="content">
                           <div class="container-fluid">
                             <div class="row">
-                              <div class="col-md-6">
-                                <form id="addStudent" action="" method="">
-
-                                  <div class="card ">
-                                    <div class="card-header card-header-primary card-header-icon">
-                                      <div class="card-icon">
-                                        <i class="material-icons">mail_outline</i>
-                                      </div>
-                                      <h4 class="card-title">New Student Form</h4>
+                              <div class="col-md-6 mr-auto ml-auto">
+                                <div class="card ">
+                                  <div class="card-header card-header-primary card-header-icon">
+                                    <div class="card-icon">
+                                      <i class="material-icons">mail_outline</i>
                                     </div>
-                                    <div class="card-body ">
-                                      <div class="form-group">
-                                        <label class="bmd-label-floating"> Student Id *</label>
-                                        <input type="text" class="form-control" id="studentId" name="studentId" required="true">
-                                      </div>
-                                      <div class="form-group">
-                                        <label class="bmd-label-floating"> First Name *</label>
-                                        <input type="text" class="form-control" id="firstName" name="firstName" required="true">
-                                      </div>
-                                      <div class="form-group">
-                                        <label class="bmd-label-floating"> Surname *</label>
-                                        <input type="text" class="form-control" id="surname" name="surname" required="true">
-                                      </div>
-                                      <div class="form-group">
-                                        <label class="bmd-label-floating"> Email Address *</label>
-                                        <input type="email" class="form-control" id="email" name="email" required="true">
-                                      </div>
-                                      <div class="form-group">
-                                        <label class="bmd-label-floating"> Phone Number *</label>
-                                        <input type="number" class="form-control" id="phone" name="phone" minLength="10" maxLength="10" required="true">
-                                      </div>
-                                      <div class="category form-category">* Required fields</div>
-                                    </div>
-                                    <div class="card-footer text-right">
-                                      <button type="submit" class="btn btn-rose">Register</button>
-                                    </div>
+                                    <h4 class="card-title">New Student(s)</h4>
                                   </div>
+                                  <div class="file-import col-md-12 mr-auto ml-auto">
+                                    <h3 class="title text-center">Import Excel File</h3>
+                                    <form id="import" method="post" enctype="multipart/form-data" action="{{ url('/students/import') }}">
+                                      {{ csrf_field() }}
 
-                                </form>
+                                        <div class="form-group form-file-upload form-file-multiple">
+                                          <input type="file" class="inputFileHidden">
+                                          <div class="input-group">
+                                              <input type="text" class="form-control inputFileVisible" placeholder="Select Excel File">
+                                              <input type="submit" name="upload" class="btn btn-primary ml-3" value="Upload">
+                                          </div>
+                                        </div>
+                                      </form>
+                                      <div class="category form-category">* Use <a href="">this</a> sample file for uploads </div>
+                                    </div>
+
+                                    <h3 class="title text-center">Or Use Form</h3>
+
+                                    <form id="addStudent" method="post" action="{{ url('/students/new') }}">
+                                      {{ csrf_field() }}
+
+                                      <div class="card-body ">
+                                        <div class="form-group">
+                                          <label class="bmd-label-floating"> Student Id *</label>
+                                          <input type="text" class="form-control" id="studentId" name="studentId" required="true">
+                                        </div>
+                                        <div class="form-group">
+                                          <label class="bmd-label-floating"> First Name *</label>
+                                          <input type="text" class="form-control" id="firstName" name="firstName" required="true">
+                                        </div>
+                                        <div class="form-group">
+                                          <label class="bmd-label-floating"> Surname *</label>
+                                          <input type="text" class="form-control" id="surname" name="surname" required="true">
+                                        </div>
+                                        <div class="form-group">
+                                          <label class="bmd-label-floating"> Email Address *</label>
+                                          <input type="email" class="form-control" id="email" name="email" required="true">
+                                        </div>
+                                        <div class="form-group">
+                                          <label class="bmd-label-floating"> Phone Number *</label>
+                                          <input type="number" class="form-control" id="phone" name="phone" minLength="10" maxLength="10" required="true">
+                                        </div>
+                                        <div class="category form-category">* Required fields</div>
+                                      </div>
+                                      <div class="card-footer text-right">
+                                        <button type="submit" class="btn btn-primary">Register</button>
+                                      </div>
+                                    </form>
+                                </div>
                               </div>
                             </div>
                           </div>

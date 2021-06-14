@@ -7,6 +7,7 @@ use App\Imports\StudentImports;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+Use Alert;
 
 class StudentsController extends Controller
 {
@@ -49,8 +50,7 @@ class StudentsController extends Controller
            } catch(\Illuminate\Database\QueryException $e){
 
               $errorCode = $e->errorInfo[2];
-              return ($errorCode);
-
+              Alert::error('Error Title', $errorCode);
            }
    
            
