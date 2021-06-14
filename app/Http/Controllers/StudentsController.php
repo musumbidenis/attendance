@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Students;
+use App\Student;
 use App\Imports\StudentImports;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 Use Alert;
 
@@ -16,26 +15,37 @@ class StudentsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function newStudent(Request $request)
     {
-        //
+        $student = new Student();
+        $student->studentId = $request->studentId;
+        $student->firstname = $request->firstName;
+        $student->surname = $request->surname;
+        $student->email = $request->email;
+        $student->phone = $request->phone;
+        $student->courseCode = "Bsc IT2";
+
+        try{
+            
+            $student->save();
+            Alert::success('Student record inserted successfully');
+
+        } catch(\Illuminate\Database\QueryException $e){
+
+            $errorCode = $e->errorInfo[1];
+
+            if($errorCode == '1062'){
+                Alert::error('Oops', 'Duplicate Entry for '.$request->studentId)->persistent(true,false);
+            }else{
+                Alert::error('Oops', $e->errorInfo[2])->persistent(true,false);
+            }
+        }
+
+        return back();
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Imports new students from excel.
      */
     public function import(Request $request)
     {
@@ -49,12 +59,16 @@ class StudentsController extends Controller
 
            } catch(\Illuminate\Database\QueryException $e){
 
-              $errorCode = $e->errorInfo[2];
-              Alert::error('Error Title', $errorCode);
+            $errorCode = $e->errorInfo[1];
+
+            if($errorCode == '1062'){
+                Alert::error('Duplicate Entry', $e->errorInfo[2])->persistent(true,false);
+            }
+              
            }
    
            
-           return back()->with('success', 'Excel Data Imported successfully.');
+           return back();
           }
     }
 
