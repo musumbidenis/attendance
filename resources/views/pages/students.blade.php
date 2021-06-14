@@ -141,13 +141,13 @@
                                   </div>
                                   <div class="file-import col-md-12 mr-auto ml-auto">
                                     <h3 class="title text-center">Import Excel File</h3>
-                                    <form id="import" method="post" enctype="multipart/form-data" action="{{ url('/students/import') }}">
+                                    <form id="importStudents" method="post" enctype="multipart/form-data" action="{{ url('/students/import') }}">
                                       {{ csrf_field() }}
 
                                         <div class="form-group form-file-upload form-file-multiple">
-                                          <input type="file" class="inputFileHidden">
+                                          <input type="file" name="excel" class="inputFileHidden">
                                           <div class="input-group">
-                                              <input type="text" class="form-control inputFileVisible" placeholder="Select Excel File">
+                                              <input type="text" class="form-control inputFileVisible" placeholder="Select Excel File" required="true">
                                               <input type="submit" name="upload" class="btn btn-primary ml-3" value="Upload">
                                           </div>
                                         </div>
@@ -205,6 +205,21 @@
 <script src="../../assets/js/plugins/jquery.validate.min.js"></script>
     <script>
       $(document).ready(function() {
+        $('#importStudents').validate({
+          /* Add custom validation here -- rules,messages e.t.c */
+
+          highlight: function(element) {
+            $(element).closest('.form-group').removeClass('has-success').addClass('has-danger');
+            $(element).closest('.form-check').removeClass('has-success').addClass('has-danger');
+          },
+          success: function(element) {
+            $(element).closest('.form-group').removeClass('has-danger').addClass('has-success');
+            $(element).closest('.form-check').removeClass('has-danger').addClass('has-success');
+          },
+          errorPlacement: function(error, element) {
+            $(element).closest('.form-group').append(error);
+          },
+        });
         $('#addStudent').validate({
           /* Add custom validation here -- rules,messages e.t.c */
 

@@ -40,12 +40,12 @@ class StudentsController extends Controller
     public function import(Request $request)
     {
         $this->validate($request, [
-            'data'  => 'required|mimes:xls,xlsx'
+            'excel'  => 'required|mimes:xls,xlsx'
            ]);
 
            try{
 
-            Excel::import(new StudentImports ,$request->file('data'));
+            Excel::import(new StudentImports ,$request->file('excel'));
 
            } catch(\Illuminate\Database\QueryException $e){
 
