@@ -4,8 +4,10 @@ namespace App\Imports;
 
 use App\Student;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 
-class StudentImports implements ToModel
+class StudentImports implements ToModel, WithHeadingRow, SkipsEmptyRows
 {
     /**
     * @param array $row
@@ -15,12 +17,12 @@ class StudentImports implements ToModel
     public function model(array $row)
     {
         return new Student([
-            'studentId'  => $row[0],
-            'firstname'   => $row[1],
-            'surname'   => $row[2],
-            'email'    => $row[3],
-            'phone'  => $row[4],
-            'courseCode'   => $row[5]
+            'studentId'  => $row['student_id'],
+            'firstname'   => $row['first_name'],
+            'surname'   => $row['surname'],
+            'email'    => $row['email'],
+            'phone'  => $row['phone'],
+            'courseCode'   => $row['course_code']
         ]);
     }
 }

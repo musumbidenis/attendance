@@ -23,6 +23,7 @@
             @include('layouts.sidebar')
             
             @yield('content')
+            @include('sweetalert::alert')
         </div>
     </div>
     <!--   Core JS Files   -->

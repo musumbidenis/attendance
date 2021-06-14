@@ -41,10 +41,17 @@ class StudentsController extends Controller
         $this->validate($request, [
             'data'  => 'required|mimes:xls,xlsx'
            ]);
-      
-           $path = $request->file('data')->getRealPath();
-      
-           $data = Excel::import(new StudentImports ,$request->file('data'));
+
+           try{
+
+            Excel::import(new StudentImports ,$request->file('data'));
+
+           } catch(\Illuminate\Database\QueryException $e){
+
+              $errorCode = $e->errorInfo[2];
+              return ($errorCode);
+
+           }
    
            
            return back()->with('success', 'Excel Data Imported successfully.');
