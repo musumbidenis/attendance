@@ -6,7 +6,7 @@ use App\Student;
 use App\Imports\StudentImports;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
-Use Alert;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class StudentsController extends Controller
 {
