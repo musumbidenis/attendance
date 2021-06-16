@@ -3,20 +3,18 @@
 
 <head>
   <meta charset="utf-8" />
-  <link rel="apple-touch-icon" sizes="76x76" href="../../assets/img/apple-icon.png">
-  <link rel="icon" type="image/png" href="../../assets/img/favicon.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+  <link rel="icon" type="image/png" href="../assets/img/favicon.png">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>
-    Material Dashboard PRO by Creative Tim
+    School Attendance System
   </title>
   <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
   <!--     Fonts and icons     -->
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
   <!-- CSS Files -->
-  <link href="../../assets/css/material-dashboard.css?v=2.1.2" rel="stylesheet" />
-  <!-- CSS Just for demo purpose, don't include it in your project -->
-  <link href="../../assets/demo/demo.css" rel="stylesheet" />
+  <link href="../assets/css/material-dashboard.css?v=2.1.2" rel="stylesheet" />
 </head>
 
 <body class="off-canvas-sidebar">
@@ -57,35 +55,23 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-4 col-md-6 col-sm-8 ml-auto mr-auto">
-            <form class="form" method="post" action="{{ url('/login') }}">
+            <form id="login" class="form" method="post" action="{{ url('/login') }}">
               <div class="card card-login card-hidden">
                 <div class="card-header card-header-info text-center">
                   <h4 class="card-title">Login</h4>
                 </div>
-                <div class="card-body ">
-                  <span class="bmd-form-group">
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text">
-                          <i class="material-icons">email</i>
-                        </span>
-                      </div>
-                      <input type="email" class="form-control" placeholder="Email...">
+                <div class="card-body ml-3 mr-3">
+                    <div class="form-group">
+                        <label class="bmd-label-floating"> Email Address *</label>
+                        <input type="email" class="form-control" id="email" name="email" required="true">
                     </div>
-                  </span>
-                  <span class="bmd-form-group">
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text">
-                          <i class="material-icons">lock_outline</i>
-                        </span>
-                      </div>
-                      <input type="password" class="form-control" placeholder="Password...">
+                    <div class="form-group">
+                        <label class="bmd-label-floating"> Password *</label>
+                        <input type="password" class="form-control" id="password" name="password" required="true">
                     </div>
-                  </span>
                 </div>
                 <div class="card-footer justify-content-center">
-                  <a href="#pablo" class="btn btn-info btn-link btn-lg">LOGIN</a>
+                  <input type="submit" class="btn btn-info btn-link btn-lg" value="LOGIN">
                 </div>
               </div>
             </form>
@@ -112,6 +98,30 @@
   <script src="../../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
   <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="../../assets/js/material-dashboard.js?v=2.1.2" type="text/javascript"></script>
+  <script src="../../assets/js/plugins/jquery.validate.min.js"></script>
+  <script>
+    function setFormValidation(id) {
+      $(id).validate({
+        /* Add custom validation here -- rules,messages e.t.c */
+
+        highlight: function(element) {
+          $(element).closest('.form-group').removeClass('has-success').addClass('has-danger');
+          $(element).closest('.form-check').removeClass('has-success').addClass('has-danger');
+        },
+        success: function(element) {
+          $(element).closest('.form-group').removeClass('has-danger').addClass('has-success');
+          $(element).closest('.form-check').removeClass('has-danger').addClass('has-success');
+        },
+        errorPlacement: function(error, element) {
+          $(element).closest('.form-group').append(error);
+        },
+      });
+    }
+    $(document).ready(function() {
+      setFormValidation('#login');
+      setFormValidation('#register');
+    });
+  </script>
   <script>
     $(document).ready(function() {
       md.checkFullPageBackgroundImage();

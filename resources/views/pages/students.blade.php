@@ -204,37 +204,26 @@
 <script src="../../assets/js/plugins/jquery.dataTables.min.js"></script>
 <script src="../../assets/js/plugins/jquery.validate.min.js"></script>
     <script>
+      function setFormValidation(id) {
+        $(id).validate({
+          /* Add custom validation here -- rules,messages e.t.c */
+
+          highlight: function(element) {
+            $(element).closest('.form-group').removeClass('has-success').addClass('has-danger');
+            $(element).closest('.form-check').removeClass('has-success').addClass('has-danger');
+          },
+          success: function(element) {
+            $(element).closest('.form-group').removeClass('has-danger').addClass('has-success');
+            $(element).closest('.form-check').removeClass('has-danger').addClass('has-success');
+          },
+          errorPlacement: function(error, element) {
+            $(element).closest('.form-group').append(error);
+          },
+        });
+      }
       $(document).ready(function() {
-        $('#importStudents').validate({
-          /* Add custom validation here -- rules,messages e.t.c */
-
-          highlight: function(element) {
-            $(element).closest('.form-group').removeClass('has-success').addClass('has-danger');
-            $(element).closest('.form-check').removeClass('has-success').addClass('has-danger');
-          },
-          success: function(element) {
-            $(element).closest('.form-group').removeClass('has-danger').addClass('has-success');
-            $(element).closest('.form-check').removeClass('has-danger').addClass('has-success');
-          },
-          errorPlacement: function(error, element) {
-            $(element).closest('.form-group').append(error);
-          },
-        });
-        $('#addStudent').validate({
-          /* Add custom validation here -- rules,messages e.t.c */
-
-          highlight: function(element) {
-            $(element).closest('.form-group').removeClass('has-success').addClass('has-danger');
-            $(element).closest('.form-check').removeClass('has-success').addClass('has-danger');
-          },
-          success: function(element) {
-            $(element).closest('.form-group').removeClass('has-danger').addClass('has-success');
-            $(element).closest('.form-check').removeClass('has-danger').addClass('has-success');
-          },
-          errorPlacement: function(error, element) {
-            $(element).closest('.form-group').append(error);
-          },
-        });
+        setFormValidation('#importStudents');
+        setFormValidation('#addStudent');
       });
     </script>
     <script>
