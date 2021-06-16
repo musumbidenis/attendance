@@ -16,11 +16,18 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('pages.dashboard');
 });
+
+Route::get('/login', function () {
+    return view('auth.login');
+});
+
+
 Route::get('/users/tutors', function () {
     return view('pages.tutors');
 });
 Route::get('/users/students', function () {
     return view('pages.students');
 });
+
 Route::post('/students/import', 'StudentsController@import');
 Route::post('/students/new', 'StudentsController@newStudent');

@@ -53,11 +53,12 @@ class StudentsController extends Controller
             'excel'  => 'required|mimes:xls,xlsx'
            ]);
 
-           try{
+        try{
 
             Excel::import(new StudentImports ,$request->file('excel'));
+            Alert::success('Students records inserted successfully');
 
-           } catch(\Illuminate\Database\QueryException $e){
+        } catch(\Illuminate\Database\QueryException $e){
 
             $errorCode = $e->errorInfo[1];
 
@@ -65,7 +66,7 @@ class StudentsController extends Controller
                 Alert::error('Duplicate Entry', $e->errorInfo[2])->persistent(true,false);
             }
               
-           }
+        }
    
            
            return back();
