@@ -50,57 +50,57 @@
   </nav>
   <!-- End Navbar -->
   <div class="wrapper wrapper-full-page">
-    <div class="page-header login-page header-filter" filter-color="black" style="background-image: url('../../assets/img/login.jpg'); background-size: cover; background-position: top center;">
+    <div class="page-header login-page header-filter" filter-color="black" style="background-image: url('../../assets/img/04.jpg'); background-size: cover; background-position: top center;">
       <!--   you can change the color of the filter page using: data-color="blue | purple | green | orange | red | rose " -->
       <div class="container">
         <div class="row">
           <div class="col-lg-4 col-md-6 col-sm-8 ml-auto mr-auto">
             @if (Request::path() == 'register')
-                <form id="register" class="form" method="post" action="{{ url('/register') }}">
-                    {{ csrf_field() }}
+              <form id="register" class="form" method="post" action="{{ url('/register') }}">
+              {{ csrf_field() }}
                     
-                    <div class="card card-login card-hidden">
-                        <div class="card-header card-header-info text-center">
-                        <h4 class="card-title">Register</h4>
-                        </div>
-                        <div class="card-body ml-3 mr-3">
-                            <div class="form-group">
-                                <label class="bmd-label-floating"> Email Address *</label>
-                                <input type="email" class="form-control" id="email" name="email" required="true">
-                            </div>
-                            <div class="form-group">
-                                <label class="bmd-label-floating"> Password *</label>
-                                <input type="password" class="form-control" id="password" name="password" required="true">
-                            </div>
-                        </div>
-                        <div class="card-footer justify-content-center">
-                        <input type="submit" class="btn btn-info btn-link btn-lg" value="LOGIN">
-                        </div>
+                <div class="card card-login card-hidden">
+                  <div class="card-header card-header-info text-center">
+                    <h4 class="card-title">Register</h4>
+                  </div>
+                  <div class="card-body ml-3 mr-3">
+                    <div class="form-group">
+                      <label class="bmd-label-floating"> Email Address *</label>
+                      <input type="email" class="form-control" id="email" name="email" required="true">
                     </div>
-                </form>
+                    <div class="form-group">
+                      <label class="bmd-label-floating"> Password *</label>
+                      <input type="password" class="form-control" id="password" name="password" required="true">
+                    </div>
+                  </div>
+                  <div class="card-footer justify-content-center">
+                    <input type="submit" class="btn btn-info btn-link btn-lg" value="LOGIN">
+                  </div>
+                </div>
+              </form>
             @else
-                <form id="login" class="form" method="post" action="{{ url('/login') }}">
-                    {{ csrf_field() }}
+              <form id="login" class="form" method="post" action="{{ url('/login') }}">
+              {{ csrf_field() }}
                     
-                    <div class="card card-login card-hidden">
-                        <div class="card-header card-header-info text-center">
-                        <h4 class="card-title">Login</h4>
-                        </div>
-                        <div class="card-body ml-3 mr-3">
-                            <div class="form-group">
-                                <label class="bmd-label-floating"> Email Address *</label>
-                                <input type="email" class="form-control" id="email" name="email" required="true">
-                            </div>
-                            <div class="form-group">
-                                <label class="bmd-label-floating"> Password *</label>
-                                <input type="password" class="form-control" id="password" name="password" required="true">
-                            </div>
-                        </div>
-                        <div class="card-footer justify-content-center">
-                        <input type="submit" class="btn btn-info btn-link btn-lg" value="LOGIN">
-                        </div>
+                <div class="card card-login card-hidden">
+                  <div class="card-header card-header-info text-center">
+                    <h4 class="card-title">Login</h4>
+                  </div>
+                  <div class="card-body ml-3 mr-3">
+                    <div class="form-group">
+                      <label class="bmd-label-floating"> Email Address *</label>
+                      <input type="email" class="form-control" id="email" name="email" required="true">
                     </div>
-                </form>
+                    <div class="form-group">
+                      <label class="bmd-label-floating"> Password *</label>
+                      <input type="password" class="form-control" id="password" name="password" required="true">
+                    </div>
+                  </div>
+                  <div class="card-footer justify-content-center">
+                    <input type="submit" class="btn btn-info btn-link btn-lg" value="LOGIN">
+                  </div>
+                </div>
+              </form>
             @endif
           </div>
         </div>
