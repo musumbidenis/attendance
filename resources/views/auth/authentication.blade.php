@@ -22,7 +22,7 @@
   <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top text-white">
     <div class="container">
       <div class="navbar-wrapper">
-        <a class="navbar-brand" href="javascript:;">Login Page</a>
+        <a class="navbar-brand"> {{ Request::path() == 'register' ? 'Registration Page' : 'Login Page' }}</a>
       </div>
       <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
         <span class="sr-only">Toggle navigation</span>
@@ -32,14 +32,14 @@
       </button>
       <div class="collapse navbar-collapse justify-content-end">
         <ul class="navbar-nav">
-          <li class="nav-item ">
-            <a href="../pages/register.html" class="nav-link">
+          <li class="nav-item {{ Request::path() == 'register' ? 'active' : '' }} ">
+            <a href="/register" class="nav-link">
               <i class="material-icons">person_add</i>
               Register
             </a>
           </li>
-          <li class="nav-item  active ">
-            <a href="../pages/login.html" class="nav-link">
+          <li class="nav-item {{ Request::path() == 'login' ? 'active' : '' }} ">
+            <a href="/login" class="nav-link">
               <i class="material-icons">fingerprint</i>
               Login
             </a>
@@ -55,26 +55,53 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-4 col-md-6 col-sm-8 ml-auto mr-auto">
-            <form id="login" class="form" method="post" action="{{ url('/login') }}">
-              <div class="card card-login card-hidden">
-                <div class="card-header card-header-info text-center">
-                  <h4 class="card-title">Login</h4>
-                </div>
-                <div class="card-body ml-3 mr-3">
-                    <div class="form-group">
-                        <label class="bmd-label-floating"> Email Address *</label>
-                        <input type="email" class="form-control" id="email" name="email" required="true">
+            @if (Request::path() == 'register')
+                <form id="register" class="form" method="post" action="{{ url('/register') }}">
+                    {{ csrf_field() }}
+                    
+                    <div class="card card-login card-hidden">
+                        <div class="card-header card-header-info text-center">
+                        <h4 class="card-title">Register</h4>
+                        </div>
+                        <div class="card-body ml-3 mr-3">
+                            <div class="form-group">
+                                <label class="bmd-label-floating"> Email Address *</label>
+                                <input type="email" class="form-control" id="email" name="email" required="true">
+                            </div>
+                            <div class="form-group">
+                                <label class="bmd-label-floating"> Password *</label>
+                                <input type="password" class="form-control" id="password" name="password" required="true">
+                            </div>
+                        </div>
+                        <div class="card-footer justify-content-center">
+                        <input type="submit" class="btn btn-info btn-link btn-lg" value="LOGIN">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label class="bmd-label-floating"> Password *</label>
-                        <input type="password" class="form-control" id="password" name="password" required="true">
+                </form>
+            @else
+                <form id="login" class="form" method="post" action="{{ url('/login') }}">
+                    {{ csrf_field() }}
+                    
+                    <div class="card card-login card-hidden">
+                        <div class="card-header card-header-info text-center">
+                        <h4 class="card-title">Login</h4>
+                        </div>
+                        <div class="card-body ml-3 mr-3">
+                            <div class="form-group">
+                                <label class="bmd-label-floating"> Email Address *</label>
+                                <input type="email" class="form-control" id="email" name="email" required="true">
+                            </div>
+                            <div class="form-group">
+                                <label class="bmd-label-floating"> Password *</label>
+                                <input type="password" class="form-control" id="password" name="password" required="true">
+                            </div>
+                        </div>
+                        <div class="card-footer justify-content-center">
+                        <input type="submit" class="btn btn-info btn-link btn-lg" value="LOGIN">
+                        </div>
                     </div>
-                </div>
-                <div class="card-footer justify-content-center">
-                  <input type="submit" class="btn btn-info btn-link btn-lg" value="LOGIN">
-                </div>
-              </div>
-            </form>
+                </form>
+            @endif
           </div>
         </div>
       </div>
