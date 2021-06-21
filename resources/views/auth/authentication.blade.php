@@ -57,7 +57,7 @@
           <div class="col-lg-4 col-md-6 col-sm-8 ml-auto mr-auto">
             @if (Request::path() == 'register')
               <form id="register" class="form" method="post" action="{{ url('/register') }}">
-              {{ csrf_field() }}
+              {{ csrf_field() }})
                     
                 <div class="card card-login card-hidden">
                   <div class="card-header card-header-info text-center">
