@@ -11,10 +11,8 @@ use RealRashid\SweetAlert\Facades\Alert;
 class StudentsController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+     * Adds New Student Record from Form
+    */
     public function newStudent(Request $request)
     {
         $student = new Student();
@@ -46,7 +44,7 @@ class StudentsController extends Controller
 
     /**
      * Imports new students from excel.
-     */
+    */
     public function import(Request $request)
     {
         $this->validate($request, [
@@ -69,7 +67,7 @@ class StudentsController extends Controller
         }
    
            
-           return back();
-          }
+        return back();
     }
+}
 

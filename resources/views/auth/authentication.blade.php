@@ -65,12 +65,28 @@
                   </div>
                   <div class="card-body ml-3 mr-3">
                     <div class="form-group">
+                      <label class="bmd-label-floating"> First Name* </label>
+                      <input type="text" class="form-control" id="firstName" name="firstName" required="true">
+                    </div>
+                    <div class="form-group">
+                      <label class="bmd-label-floating"> Surname* </label>
+                      <input type="text" class="form-control" id="surname" name="surname" required="true">
+                    </div>
+                    <div class="form-group">
+                      <label class="bmd-label-floating"> Phone* </label>
+                      <input type="number" class="form-control" id="phone" name="phone" required="true">
+                    </div>
+                    <div class="form-group">
                       <label class="bmd-label-floating"> Email Address *</label>
                       <input type="email" class="form-control" id="email" name="email" required="true">
                     </div>
                     <div class="form-group">
-                      <label class="bmd-label-floating"> Password *</label>
-                      <input type="password" class="form-control" id="password" name="password" required="true">
+                      <select class="selectpicker" name="courseCode" data-size="7" data-style="select-with-transition" title="Choose your course" required="true">
+                        <option disabled selected>Select Course</option>
+                        @foreach ($courses as $course)
+                          <option value={{$course->courseCode}}>{{$course->description}}</option>
+                        @endforeach
+                      </select>
                     </div>
                   </div>
                   <div class="card-footer justify-content-center">
@@ -123,6 +139,8 @@
   <script src="../../assets/js/core/popper.min.js"></script>
   <script src="../../assets/js/core/bootstrap-material-design.min.js"></script>
   <script src="../../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+  <!--	Plugin for Select, full documentation here: http://silviomoreto.github.io/bootstrap-select -->
+  <script src="../../assets/js/plugins/bootstrap-selectpicker.js"></script>
   <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="../../assets/js/material-dashboard.js?v=2.1.2" type="text/javascript"></script>
   <script src="../../assets/js/plugins/jquery.validate.min.js"></script>

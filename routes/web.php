@@ -15,12 +15,8 @@ use Illuminate\Support\Facades\Route;
 
 
 /* Authentication Routes */
-Route::get('/login', function () {
-    return view('auth.authentication');
-});
-Route::get('/register', function () {
-    return view('auth.authentication');
-});
+Route::get('/login', 'PagesController@login');
+Route::get('/register', 'PagesController@register');
 
 
 /* Page Routes */
