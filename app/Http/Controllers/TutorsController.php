@@ -2,84 +2,44 @@
 
 namespace App\Http\Controllers;
 
-use App\Tutors;
+use App\Tutor;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class TutorsController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+     * Adds New Tutor Record from Form
+    */
+    public function newTutor(Request $request)
     {
-        //
-    }
+        $tutor = new Tutor();
+        $tutor->tutorId = $request->tutorId;
+        $tutor->firstname = $request->firstName;
+        $tutor->surname = $request->surname;
+        $tutor->email = $request->email;
+        $tutor->phone = $request->phone;
+        $tutor->role = "regular";
+        $tutor->courseCode = $request->courseCode;
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+        try{
+            
+            $tutor->save();
+            Alert::success('Success','Details have been submitted for approval. An email will be sent with your login credentials.');
+            return redirect('/login');
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        } catch(\Illuminate\Database\QueryException $e){
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Tutors  $tutors
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Tutors $tutors)
-    {
-        //
-    }
+            $errorCode = $e->errorInfo[1];
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Tutors  $tutors
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Tutors $tutors)
-    {
-        //
-    }
+            if($errorCode == '1062'){
+                Alert::error('Oops', 'Tutor ID ' .$request->tutorId. ' is already registered. Please login to continue.')->persistent(true,false);
+            }else{
+                Alert::error('Oops', $e->errorInfo[2])->persistent(true,false);
+            }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Tutors  $tutors
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Tutors $tutors)
-    {
-        //
-    }
+            return back();
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Tutors  $tutors
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Tutors $tutors)
-    {
-        //
     }
 }

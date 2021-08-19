@@ -18,6 +18,7 @@
 </head>
 
 <body class="off-canvas-sidebar">
+  @include('sweetalert::alert')
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top text-white">
     <div class="container">
@@ -56,7 +57,7 @@
         <div class="row">
           <div class="col-lg-4 col-md-6 col-sm-8 ml-auto mr-auto">
             @if (Request::path() == 'register')
-              <form id="register" class="form" method="post" action="{{ url('/register') }}">
+              <form id="register" class="form" method="post" action="{{ url('/tutors/new') }}">
               {{ csrf_field() }})
                     
                 <div class="card card-login card-hidden">
@@ -65,15 +66,19 @@
                   </div>
                   <div class="card-body ml-3 mr-3">
                     <div class="form-group">
-                      <label class="bmd-label-floating"> First Name* </label>
+                      <label class="bmd-label-floating"> Tutor ID * </label>
+                      <input type="text" class="form-control" id="tutorId" name="tutorId" required="true">
+                    </div>
+                    <div class="form-group">
+                      <label class="bmd-label-floating"> First Name * </label>
                       <input type="text" class="form-control" id="firstName" name="firstName" required="true">
                     </div>
                     <div class="form-group">
-                      <label class="bmd-label-floating"> Surname* </label>
+                      <label class="bmd-label-floating"> Surname * </label>
                       <input type="text" class="form-control" id="surname" name="surname" required="true">
                     </div>
                     <div class="form-group">
-                      <label class="bmd-label-floating"> Phone* </label>
+                      <label class="bmd-label-floating"> Phone * </label>
                       <input type="number" class="form-control" id="phone" name="phone" required="true">
                     </div>
                     <div class="form-group">
@@ -84,13 +89,13 @@
                       <select class="selectpicker" name="courseCode" data-size="7" data-style="select-with-transition" title="Choose your course" required="true">
                         <option disabled selected>Select Course</option>
                         @foreach ($courses as $course)
-                          <option value={{$course->courseCode}}>{{$course->description}}</option>
+                        <option value={{$course->courseCode}}>{{$course->description}}</option>
                         @endforeach
                       </select>
                     </div>
                   </div>
                   <div class="card-footer justify-content-center">
-                    <input type="submit" class="btn btn-info btn-link btn-lg" value="LOGIN">
+                    <input type="submit" class="btn btn-info btn-link btn-lg" value="REGISTER">
                   </div>
                 </div>
               </form>

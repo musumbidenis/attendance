@@ -21,7 +21,7 @@ class StudentsController extends Controller
         $student->surname = $request->surname;
         $student->email = $request->email;
         $student->phone = $request->phone;
-        $student->courseCode = "Bsc IT2";
+        $student->courseCode = "BIT";
 
         try{
             

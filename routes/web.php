@@ -30,6 +30,7 @@ Route::get('/users/students', function () {
     return view('pages.students');
 });
 
+Route::post('/tutors/new', 'TutorsController@newTutor');
 
 Route::post('/students/import', 'StudentsController@import');
 Route::post('/students/new', 'StudentsController@newStudent');
