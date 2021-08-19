@@ -109,8 +109,8 @@
                   </div>
                   <div class="card-body ml-3 mr-3">
                     <div class="form-group">
-                      <label class="bmd-label-floating"> Email Address *</label>
-                      <input type="email" class="form-control" id="email" name="email" required="true">
+                      <label class="bmd-label-floating"> Tutor ID *</label>
+                      <input type="text" class="form-control" id="email" name="email" required="true">
                     </div>
                     <div class="form-group">
                       <label class="bmd-label-floating"> Password *</label>
