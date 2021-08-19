@@ -25,6 +25,7 @@ class AuthController extends Controller
 
         try{
             
+            /*Adds record to db*/
             $tutor->save();
             Alert::success('Success','Details have been submitted for approval. An email will be sent with your login credentials.');
             return redirect('/login');
@@ -33,11 +34,13 @@ class AuthController extends Controller
 
             $errorCode = $e->errorInfo[1];
 
+            /*Catches duplicate error */
             if($errorCode == '1062'){
 
                 Alert::error('Oops', 'Tutor ID ' .$request->tutorId. ' is already registered. Please login to continue.')->persistent(true,false);
                 return redirect('/login');
 
+            /*Catches all other errors */
             }else{
 
                 Alert::error('Oops', $e->errorInfo[2])->persistent(true,false);
@@ -52,7 +55,7 @@ class AuthController extends Controller
 
 
     /**
-     * Adds New Tutor Record
+     * Authenticates Credentials
     */
     public function login(Request $request)
     {
@@ -60,7 +63,7 @@ class AuthController extends Controller
         $password = $request->password;
 
         try{
-            /*Check if tutor record exists */
+            /*Checks if tutor record exists */
             $credentials = Tutor::where('tutorId', $tutorId)->count();
 
             /*Tutor does not exist */
@@ -69,7 +72,7 @@ class AuthController extends Controller
                 Alert::error('Oops', 'Invalid login credentials. Please register for an account.')->persistent(true,false);
                 return back();
 
-            /*Tutor exists -- Check tutor status */
+            /*Tutor exists -- Checks tutor status */
             } else {
 
                 $status = Tutor::select('status')->where('tutorId', $tutorId)->get()->first();
@@ -79,6 +82,7 @@ class AuthController extends Controller
 
                         $request->session()->put('tutorId',$tutorId);
                         return redirect('/dashboard');
+
                         break;
 
                     case 'approved':
@@ -91,27 +95,18 @@ class AuthController extends Controller
                     default:
 
                         Alert::error('Oops', 'Incorrect login credentials. Please try again.')->persistent(true,false);
+                        return back();
+
                         break;
                 }
             }
 
         } catch(\Illuminate\Database\QueryException $e){
 
-            $errorCode = $e->errorInfo[1];
-
-            if($errorCode == '1062'){
-
-                Alert::error('Oops', 'Tutor ID ' .$request->tutorId. ' is already registered. Please login to continue.')->persistent(true,false);
-                return redirect('/login');
-
-            }else{
-
-                Alert::error('Oops', $e->errorInfo[2])->persistent(true,false);
-                return back();
+            /*Catches errors */
+            Alert::error('Oops', $e->errorInfo[2])->persistent(true,false);
+            return back();
                 
-            }
-
-            
         }
 
     }
