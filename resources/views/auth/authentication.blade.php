@@ -57,7 +57,7 @@
         <div class="row">
           <div class="col-lg-4 col-md-6 col-sm-8 ml-auto mr-auto">
             @if (Request::path() == 'register')
-              <form id="register" class="form" method="post" action="{{ url('/tutors/new') }}">
+              <form id="register" class="form" method="post" action="{{ url('/register') }}">
               {{ csrf_field() }})
                     
                 <div class="card card-login card-hidden">
@@ -110,7 +110,7 @@
                   <div class="card-body ml-3 mr-3">
                     <div class="form-group">
                       <label class="bmd-label-floating"> Tutor ID *</label>
-                      <input type="text" class="form-control" id="email" name="email" required="true">
+                      <input type="text" class="form-control" id="email" name="tutorId" required="true">
                     </div>
                     <div class="form-group">
                       <label class="bmd-label-floating"> Password *</label>
