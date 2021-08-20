@@ -64,40 +64,29 @@ class AuthController extends Controller
 
         try{
             /*Checks if tutor record exists */
-            $credentials = Tutor::where('tutorId', $tutorId)->count();
+            $credentials = Tutor::where('tutorId', $tutorId)->where('password', $password)->count();
 
-            /*Tutor does not exist */
+            /*Invalid credentials */
             if ($credentials == 0) {
 
-                Alert::error('Oops', 'Invalid login credentials. Please register for an account.')->persistent(true,false);
+                Alert::error('Oops', 'Invalid login credentials. Please try again.')->persistent(true,false);
                 return back();
 
-            /*Tutor exists -- Checks tutor status */
+            /*Correct credentials -- Check tutor status */
             } else {
 
                 $status = Tutor::select('status')->where('tutorId', $tutorId)->get()->first();
 
-                switch ($status) {
-                    case 'active':
+                if($status->status == 'active'){
 
-                        $request->session()->put('tutorId',$tutorId);
-                        return redirect('/dashboard');
+                    $request->session()->put('tutorId',$tutorId);
+                    return redirect('/dashboard');
 
-                        break;
+                }else{
 
-                    case 'approved':
-
-                        $request->session()->put('tutorId',$tutorId);
-                        return view('auth.resetPassword');
-
-                        break;
-
-                    default:
-
-                        Alert::error('Oops', 'Incorrect login credentials. Please try again.')->persistent(true,false);
-                        return back();
-
-                        break;
+                    $request->session()->put('tutorId',$tutorId);
+                    return view('auth.resetPassword');
+                    
                 }
             }
 
