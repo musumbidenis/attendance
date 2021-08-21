@@ -23,4 +23,18 @@ class PagesController extends Controller
     {
         return view('auth.authentication');
     }
+
+    /*GET
+    */
+    public function resetPassword()
+    {
+        return view('auth.authentication');
+    }
+
+    /*GET
+    */
+    public function dashboard()
+    {
+        return view('pages.dashboard');
+    }
 }

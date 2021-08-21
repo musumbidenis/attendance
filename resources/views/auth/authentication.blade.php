@@ -23,7 +23,13 @@
   <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top text-white">
     <div class="container">
       <div class="navbar-wrapper">
-        <a class="navbar-brand"> {{ Request::path() == 'register' ? 'Registration Page' : 'Login Page' }}</a>
+        @if (Request::path() == 'register')
+          <p class="navbar-brand">Registration Page </p>
+        @elseif (Request::path() == 'resetpassword')
+          <p class="navbar-brand">Password Reset Page </p>
+        @else
+          <p class="navbar-brand">Login Page </p>
+        @endif
       </div>
       <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
         <span class="sr-only">Toggle navigation</span>
@@ -99,29 +105,52 @@
                   </div>
                 </div>
               </form>
-            @else
-              <form id="login" class="form" method="post" action="{{ url('/login') }}">
+            @elseif(Request::path() == 'resetpassword')
+              <form id="resetPassword" class="form" method="post" action="{{ url('resetpassword') }}">
               {{ csrf_field() }}
                     
                 <div class="card card-login card-hidden">
                   <div class="card-header card-header-info text-center">
-                    <h4 class="card-title">Login</h4>
+                    <h4 class="card-title">Reset Password</h4>
                   </div>
                   <div class="card-body ml-3 mr-3">
                     <div class="form-group">
-                      <label class="bmd-label-floating"> Tutor ID *</label>
-                      <input type="text" class="form-control" id="email" name="tutorId" required="true">
+                      <label class="bmd-label-floating">New Password *</label>
+                      <input type="password" class="form-control" id="password" name="password" required="true">
                     </div>
                     <div class="form-group">
-                      <label class="bmd-label-floating"> Password *</label>
-                      <input type="password" class="form-control" id="password" name="password" required="true">
+                      <label class="bmd-label-floating"> Confirm Password *</label>
+                      <input type="password" class="form-control" id="confirmPassword" equalTo="#password" name="confirmPassword" required="true">
                     </div>
                   </div>
                   <div class="card-footer justify-content-center">
-                    <input type="submit" class="btn btn-info btn-link btn-lg" value="LOGIN">
+                    <input type="submit" class="btn btn-info btn-link btn-lg" value="RESET">
                   </div>
                 </div>
               </form>
+            @else
+              <form id="login" class="form" method="post" action="{{ url('/login') }}">
+                {{ csrf_field() }}
+                      
+                  <div class="card card-login card-hidden">
+                    <div class="card-header card-header-info text-center">
+                      <h4 class="card-title">Login</h4>
+                    </div>
+                    <div class="card-body ml-3 mr-3">
+                      <div class="form-group">
+                        <label class="bmd-label-floating"> Tutor ID *</label>
+                        <input type="text" class="form-control" id="email" name="tutorId" required="true">
+                      </div>
+                      <div class="form-group">
+                        <label class="bmd-label-floating"> Password *</label>
+                        <input type="password" class="form-control" id="password" name="password" required="true">
+                      </div>
+                    </div>
+                    <div class="card-footer justify-content-center">
+                      <input type="submit" class="btn btn-info btn-link btn-lg" value="LOGIN">
+                    </div>
+                  </div>
+                </form>
             @endif
           </div>
         </div>
@@ -170,6 +199,7 @@
     $(document).ready(function() {
       setFormValidation('#login');
       setFormValidation('#register');
+      setFormValidation('#resetPassword');
     });
   </script>
   <script>

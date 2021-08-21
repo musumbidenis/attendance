@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Tutor;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
+use DB;
 
 class AuthController extends Controller
 {
@@ -85,10 +86,36 @@ class AuthController extends Controller
                 }else{
 
                     $request->session()->put('tutorId',$tutorId);
-                    return view('auth.resetPassword');
+                    Alert::toast('Please change the default password provided to proceed.', 'info')->persistent(false,false);
+
+                    return redirect('resetpassword');
+                    
                     
                 }
             }
+
+        } catch(\Illuminate\Database\QueryException $e){
+
+            /*Catches errors */
+            Alert::error('Oops', $e->errorInfo[2])->persistent(true,false);
+            return back();
+                
+        }
+
+    }
+
+    /**
+     * Authenticates Credentials
+    */
+    public function resetPassword(Request $request, $tutorId)
+    {
+        
+        $password = $request->password;
+
+        try{
+            
+            DB::update('update tutors set password = ? where tutorId = ?', [$password, $tutorId]);
+            Alert::success('Success', 'Update was successful.')->persistent(true,false);
 
         } catch(\Illuminate\Database\QueryException $e){
 

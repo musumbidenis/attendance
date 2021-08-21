@@ -14,24 +14,26 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-/* Authentication Routes */
-Route::get('/login', 'PagesController@login');
-Route::get('/register', 'PagesController@register');
-
-
 /* Page Routes */
-Route::get('/', function () {
-    return view('pages.dashboard');
-});
-Route::get('/users/tutors', function () {
+Route::get('dashboard', 'PagesController@dashboard');
+Route::get('users/tutors', function () {
     return view('pages.tutors');
 });
-Route::get('/users/students', function () {
+Route::get('users/students', function () {
     return view('pages.students');
 });
 
-Route::post('/register', 'AuthController@register');
-Route::post('/login', 'AuthController@login');
+Route::get('login', 'PagesController@login');
+Route::get('register', 'PagesController@register');
+Route::get('resetpassword', 'PagesController@resetPassword');
 
-Route::post('/students/import', 'StudentsController@import');
-Route::post('/students/new', 'StudentsController@newStudent');
+
+
+
+
+Route::post('register', 'AuthController@register');
+Route::post('login', 'AuthController@login');
+Route::post('resetpassword', 'AuthController@resetPassword');
+
+Route::post('students/import', 'StudentsController@import');
+Route::post('students/new', 'StudentsController@newStudent');
