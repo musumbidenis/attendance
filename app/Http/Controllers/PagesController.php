@@ -33,8 +33,8 @@ class PagesController extends Controller
 
     /*GET
     */
-    public function dashboard()
+    public function dashboard(Request $request)
     {
-        return view('pages.dashboard');
+        return view('pages.dashboard',['tutorId'=>$request->session()->get('tutorId')]);
     }
 }

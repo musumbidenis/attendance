@@ -29,7 +29,7 @@ class AuthController extends Controller
             /*Adds record to db*/
             $tutor->save();
             Alert::success('Success','Details have been submitted for approval. An email will be sent with your login credentials.');
-            return redirect('/login');
+            return redirect('login');
 
         } catch(\Illuminate\Database\QueryException $e){
 
@@ -39,7 +39,7 @@ class AuthController extends Controller
             if($errorCode == '1062'){
 
                 Alert::error('Oops', 'Tutor ID ' .$request->tutorId. ' is already registered. Please login to continue.')->persistent(true,false);
-                return redirect('/login');
+                return redirect('login');
 
             /*Catches all other errors */
             }else{
@@ -81,12 +81,12 @@ class AuthController extends Controller
                 if($status->status == 'active'){
 
                     $request->session()->put('tutorId',$tutorId);
-                    return redirect('/dashboard');
+                    return redirect('dashboard');
 
                 }else{
 
                     $request->session()->put('tutorId',$tutorId);
-                    Alert::toast('Please change the default password provided to proceed.', 'info')->persistent(false,false);
+                    Alert::toast("You're required to change your password before proceeding.", 'info')->persistent(false,false);
 
                     return redirect('resetpassword');
                     
@@ -107,15 +107,18 @@ class AuthController extends Controller
     /**
      * Authenticates Credentials
     */
-    public function resetPassword(Request $request, $tutorId)
+    public function resetPassword(Request $request)
     {
         
         $password = $request->password;
+        $tutorId = $request->session()->get('tutorId');
 
         try{
             
             DB::update('update tutors set password = ? where tutorId = ?', [$password, $tutorId]);
-            Alert::success('Success', 'Update was successful.')->persistent(true,false);
+            Alert::success('Success', 'Password reset was successful.')->persistent(true,false);
+
+            return redirect('dashboard');
 
         } catch(\Illuminate\Database\QueryException $e){
 
