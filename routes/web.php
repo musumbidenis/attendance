@@ -15,13 +15,17 @@ use Illuminate\Support\Facades\Route;
 
 
 /* Page Routes */
-Route::get('dashboard', 'PagesController@dashboard');
+Route::get('dashboard', 'PagesController@dashboard')->middleware('admin');
+
 Route::get('users/tutors', function () {
     return view('pages.tutors');
 });
 Route::get('users/students', function () {
     return view('pages.students');
 });
+
+
+
 
 Route::get('login', 'PagesController@login');
 Route::get('register', 'PagesController@register');

@@ -10,11 +10,6 @@
                     <br />
                     <ul class="nav nav-pills nav-pills-info nav-pills-icons justify-content-center" role="tablist">
                       <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#stats" role="tablist">
-                          <i class="material-icons">pie_chart</i> Stats
-                        </a>
-                      </li>
-                      <li class="nav-item">
                         <a class="nav-link" data-toggle="tab" href="#search" role="tablist">
                           <i class="material-icons">search</i> Search
                         </a>
@@ -26,34 +21,6 @@
                       </li>
                     </ul>
                     <div class="tab-content tab-space tab-subcategories">
-                      <div class="tab-pane" id="stats">
-                        <div class="content">
-                          <div class="container-fluid">
-                            <div class="row">
-                              <div class="col-md-5">
-                                <div class="card card-chart">
-                                  <div class="card-header card-header-icon card-header-primary">
-                                    <div class="card-icon">
-                                      <i class="material-icons">pie_chart</i>
-                                    </div>
-                                    <h4 class="card-title">Pie Chart</h4>
-                                  </div>
-                                  <div class="card-body">
-                                    <div id="chartPreferences" class="ct-chart"></div>
-                                  </div>
-                                  <div class="card-footer">
-                                    <div class="row">
-                                      <div class="col-md-12">
-                                        <h6 class="card-category">Legend</h6>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
                       <div class="tab-pane" id="search">
                         <div class="content">
                           <div class="container-fluid">
@@ -64,7 +31,7 @@
                                     <div class="card-icon">
                                       <i class="material-icons">assignment</i>
                                     </div>
-                                    <h4 class="card-title">DataTables.net</h4>
+                                    <h4 class="card-title">Students</h4>
                                   </div>
                                   <div class="card-body">
                                     <div class="toolbar">
