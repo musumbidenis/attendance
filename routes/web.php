@@ -35,6 +35,7 @@ Route::post('students/new', 'StudentsController@newStudent');
 Route::get('login', 'PagesController@login');
 Route::get('register', 'PagesController@register');
 Route::get('resetpassword', 'PagesController@resetPassword');
+Route::get('logout', 'AuthController@logout');
 
 Route::post('login', 'AuthController@login');
 Route::post('register', 'AuthController@register');

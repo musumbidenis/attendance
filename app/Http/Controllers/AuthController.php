@@ -82,6 +82,7 @@ class AuthController extends Controller
 
                     $request->session()->put('tutorId',$tutorId);
                     return redirect('dashboard');
+                }
 
                 }else{
 
@@ -105,7 +106,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Authenticates Credentials
+     * Resets Password
     */
     public function resetPassword(Request $request)
     {
@@ -129,5 +130,15 @@ class AuthController extends Controller
                 
         }
 
+    }
+
+
+    /**
+     * Logsout user
+    */
+    public function logout(Request $request)
+    {
+        $request->session()->flush();
+        return redirect('login');
     }
 }
