@@ -42,8 +42,8 @@
               <!-- Sidebar menu items -->
               <ul class="nav">
 
-                <li class="nav-item {{ Request::path() == '/' ? 'active' : '' }} ">
-                  <a class="nav-link " href="/">
+                <li class="nav-item {{ Request::path() == 'dashboard' ? 'active' : '' }} ">
+                  <a class="nav-link " href="/dashboard">
                     <i class="material-icons">dashboard</i>
                     <p> Dashboard </p>
                   </a>

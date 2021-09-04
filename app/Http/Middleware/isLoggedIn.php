@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use RealRashid\SweetAlert\Facades\Alert;
 use Closure;
 
-class Admin
+class isLoggedIn
 {
     /**
      * Handle an incoming request.
@@ -22,6 +22,5 @@ class Admin
 
         Alert::error('Oops', 'You must be logged in to access this resource.')->persistent(true,false);
         return redirect('login');
-        
     }
 }

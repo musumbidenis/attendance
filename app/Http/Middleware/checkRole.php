@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use RealRashid\SweetAlert\Facades\Alert;
 use Closure;
 
-class Admin
+class checkRole
 {
     /**
      * Handle an incoming request.
@@ -16,12 +16,6 @@ class Admin
      */
     public function handle($request, Closure $next)
     {
-        if(session()->has('tutorId')){
-            return $next($request);
-        }
-
-        Alert::error('Oops', 'You must be logged in to access this resource.')->persistent(true,false);
-        return redirect('login');
-        
+        return $next($request);
     }
 }

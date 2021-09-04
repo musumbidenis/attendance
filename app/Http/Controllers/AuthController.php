@@ -115,9 +115,10 @@ class AuthController extends Controller
 
         try{
             
-            DB::update('update tutors set password = ? where tutorId = ?', [$password, $tutorId]);
+            DB::update('UPDATE tutors SET password = ?, status = ? where tutorId = ?', [$password, 'active', $tutorId]);
             Alert::success('Success', 'Password reset was successful.')->persistent(true,false);
 
+            $request->session()->put('tutorId',$tutorId);
             return redirect('dashboard');
 
         } catch(\Illuminate\Database\QueryException $e){
