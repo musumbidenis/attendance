@@ -26,12 +26,9 @@ Route::get('users/students', function () {
 
 
 
-
 Route::get('login', 'PagesController@login');
 Route::get('register', 'PagesController@register');
 Route::get('resetpassword', 'PagesController@resetPassword');
-
-
 
 
 

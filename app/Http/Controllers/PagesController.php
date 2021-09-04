@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Course;
 Use DB;
-use Illuminate\Http\Request;
 
 class PagesController extends Controller
 {

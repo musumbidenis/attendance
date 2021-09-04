@@ -114,6 +114,14 @@
                     <h4 class="card-title">Reset Password</h4>
                   </div>
                   <div class="card-body ml-3 mr-3">
+                    @if (session()->has('tutorId'))
+                      <div class="form-group">
+                        <input type="text" class="form-control" name="tutorId" value="{{session()->get('tutorId')}}" hidden>
+                      </div>
+                      @php
+                        session()->forget('tutorId')
+                      @endphp
+                    @endif
                     <div class="form-group">
                       <label class="bmd-label-floating">New Password *</label>
                       <input type="password" class="form-control" id="password" name="password" required="true">

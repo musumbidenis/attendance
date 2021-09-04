@@ -2,7 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use RealRashid\SweetAlert\Facades\Alert;
 use Closure;
+use Session;
 
 class Admin
 {
@@ -15,10 +17,11 @@ class Admin
      */
     public function handle($request, Closure $next)
     {
-        if($request->ip() == '127.0.0.0'){
+        if(session()->has('tutorId')){
             return $next($request);
         }
 
+        Alert::success('Student record inserted successfully');
         return redirect('login');
         
     }

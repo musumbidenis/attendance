@@ -28,7 +28,7 @@ class AuthController extends Controller
             
             /*Adds record to db*/
             $tutor->save();
-            Alert::success('Success','Details have been submitted for approval. An email will be sent with your login credentials.');
+            Alert::success('Success','Details have been submitted successfully. An email will be sent with your login credentials upon approval.');
             return redirect('login');
 
         } catch(\Illuminate\Database\QueryException $e){
@@ -86,7 +86,7 @@ class AuthController extends Controller
                 }else{
 
                     $request->session()->put('tutorId',$tutorId);
-                    Alert::toast("You're required to change your password before proceeding.", 'info')->persistent(false,false);
+                    Alert::toast("You're required to change your password before proceeding.", 'info')->persistent(false, true);
 
                     return redirect('resetpassword');
                     
@@ -110,8 +110,8 @@ class AuthController extends Controller
     public function resetPassword(Request $request)
     {
         
+        $tutorId = $request->tutorId;
         $password = $request->password;
-        $tutorId = $request->session()->get('tutorId');
 
         try{
             
