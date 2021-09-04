@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 
 /* Page Routes */
-Route::middleware(['isLoggedIn'])->group(function () {
+Route::middleware(['isLoggedIn','isAdmin'])->group(function () {
     Route::get('dashboard', 'PagesController@dashboard');
 
     Route::get('users/tutors', function () {
