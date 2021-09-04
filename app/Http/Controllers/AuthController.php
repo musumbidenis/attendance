@@ -82,7 +82,11 @@ class AuthController extends Controller
 
                     $request->session()->put('tutorId',$tutorId);
                     return redirect('dashboard');
-                }
+
+                }elseif($status->status == 'pending'){
+
+                    Alert::error('Oops', 'Your details are still being processed. Please wait for approval.')->persistent(true,false);
+                    return back();
 
                 }else{
 
