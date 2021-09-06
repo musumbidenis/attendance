@@ -15,15 +15,12 @@ use Illuminate\Support\Facades\Route;
 
 
 /* Page Routes */
-Route::middleware(['isLoggedIn','isAdmin', 'pr'])->group(function () {
-    Route::get('dashboard', 'PagesController@dashboard');
+Route::middleware(['isLoggedIn'])->group(function () {
 
-    Route::get('users/tutors', function () {
-        return view('pages.tutors');
-    });
-    Route::get('users/students', function () {
-        return view('pages.students');
-    });
+    Route::get('dashboard', 'PagesController@dashboard');
+    Route::get('users/tutors', 'TutorsController@tutors');
+    Route::get('users/students', 'PagesController@students');
+    
 });
 
 
@@ -34,7 +31,7 @@ Route::post('students/new', 'StudentsController@newStudent');
 /* Authentication Routes */
 Route::get('login', 'PagesController@login');
 Route::get('register', 'PagesController@register');
-Route::get('resetpassword', 'PagesController@resetPassword');
+Route::get('resetpassword', 'PagesController@resetPassword')->middleware('isLoggedIn');
 Route::get('logout', 'AuthController@logout');
 
 Route::post('login', 'AuthController@login');

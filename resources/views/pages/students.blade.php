@@ -148,6 +148,14 @@
                                           <label class="bmd-label-floating"> Phone Number *</label>
                                           <input type="number" class="form-control" id="phone" name="phone" minLength="10" maxLength="10" required="true">
                                         </div>
+                                        <div class="form-group">
+                                          <select class="selectpicker" name="courseCode" data-size="7" data-style="select-with-transition" title="Choose your course" required="true">
+                                            <option disabled selected>Select Course</option>
+                                            @foreach ($courses as $course)
+                                            <option value={{$course->courseCode}}>{{$course->description}}</option>
+                                            @endforeach
+                                          </select>
+                                        </div>
                                         <div class="category form-category">* Required fields</div>
                                       </div>
                                       <div class="card-footer text-right">

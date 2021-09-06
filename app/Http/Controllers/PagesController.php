@@ -37,4 +37,14 @@ class PagesController extends Controller
     {
         return view('pages.dashboard',['tutorId'=>$request->session()->get('tutorId')]);
     }
+
+    /*GET
+    */
+    public function students(Request $request)
+    {
+        $courses = DB::select('select * from courses');
+
+        return view('pages.students',['courses'=>$courses]);
+    }
+
 }
