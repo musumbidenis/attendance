@@ -15,7 +15,8 @@ class TutorsController extends Controller
     public function tutors(Request $request)
     {
         $tutors = DB::select('select * from tutors');
-        
-        return view('pages.tutors',['tutors'=>$tutors]);
+        $courses = DB::select('select * from courses');
+
+        return view('pages.tutors',['tutors'=>$tutors, 'courses'=>$courses]);
     }
 }

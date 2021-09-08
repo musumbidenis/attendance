@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use DB;
+use App\Course;
 use App\Student;
 use App\Imports\StudentImports;
 use Illuminate\Http\Request;
@@ -10,6 +12,17 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class StudentsController extends Controller
 {
+    /**
+     * Fetches Students records from DB
+    */
+    public function students(Request $request)
+    {
+        $courses = DB::select('select * from courses');
+
+        return view('pages.students',['courses'=>$courses]);
+    }
+
+
     /**
      * Adds New Student Record from Form
     */
@@ -21,7 +34,7 @@ class StudentsController extends Controller
         $student->surname = $request->surname;
         $student->email = $request->email;
         $student->phone = $request->phone;
-        $student->courseCode = "BIT";
+        $student->courseCode = $request->courseCode;
 
         try{
             

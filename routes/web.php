@@ -19,7 +19,7 @@ Route::middleware(['isLoggedIn'])->group(function () {
 
     Route::get('dashboard', 'PagesController@dashboard');
     Route::get('users/tutors', 'TutorsController@tutors');
-    Route::get('users/students', 'PagesController@students');
+    Route::get('users/students', 'StudentsController@students');
     
 });
 

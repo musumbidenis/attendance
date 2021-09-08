@@ -53,9 +53,35 @@
                           <td>{{$tutor->role}}</td>
                           <td>{{$tutor->status}}</td>
                           <td class="text-right">
-                            <a href="#" class="btn btn-link btn-info btn-just-icon like"><i class="material-icons">favorite</i></a>
-                            <a href="#" class="btn btn-link btn-warning btn-just-icon edit"><i class="material-icons">dvr</i></a>
-                            <a href="#" class="btn btn-link btn-danger btn-just-icon remove"><i class="material-icons">close</i></a>
+                            <div class="float-right">
+                              <form action="" method="post">
+                                {{ csrf_field() }}
+
+                                <button type="button" class="btn btn-danger btn-link" rel="tooltip" data-placement="bottom" title="Delete">
+                                  <i class="material-icons">close</i>
+                                </button>
+                              </form>
+                            </div>
+                            <div class="float-right">
+                              <form action="" method="post">
+                                {{ csrf_field() }}
+
+                                <button type="button" class="btn btn-success btn-link" rel="tooltip" data-placement="bottom" title="Edit">
+                                  <i class="material-icons">edit</i>
+                                </button>
+                              </form>
+                            </div>
+                            @if ($tutor->status == 'pending')
+                            <div class="float-right">
+                              <form action="" method="post">
+                                {{ csrf_field() }}
+                                
+                                <button type="button" class="btn btn-info btn-link" rel="tooltip" data-placement="bottom" title="Approve">
+                                  <i class="material-icons">check_box</i>
+                                </button>
+                              </form>
+                            </div>
+                            @endif
                           </td>
                         </tr>
                       @endforeach
