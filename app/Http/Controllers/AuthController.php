@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use App\Tutor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use RealRashid\SweetAlert\Facades\Alert;
-use DB;
 
 class AuthController extends Controller
 {
@@ -64,41 +65,46 @@ class AuthController extends Controller
         $password = $request->password;
 
         try{
-            /*Checks if tutor record exists */
-            $credentials = Tutor::where('tutorId', $tutorId)->where('password', $password)->count();
 
-            /*Invalid credentials */
-            if ($credentials == 0) {
+            $tutorDetails = Tutor::where('tutorId', $tutorId)->get()->first();
 
-                Alert::error('Oops', 'Invalid login credentials. Please try again.')->persistent(true,false);
+            if ($tutorDetails == null) {
+
+                Alert::error('Oops', 'Invalid User ID. Please try again.')->persistent(true,false);
                 return back();
 
-            /*Correct credentials -- Check tutor status */
-            } else {
+            }else{
 
-                $status = Tutor::select('status')->where('tutorId', $tutorId)->get()->first();
+                if (!Hash::check($password, $tutorDetails->password)) {
 
-                if($status->status == 'active'){
+                   Alert::error('Oops', 'Invalid Password. Please try again.')->persistent(true,false);
+                   return back();
+                   
+                }else {
 
-                    $request->session()->put('tutorId',$tutorId);
-                    return redirect('dashboard');
+                    if($tutorDetails->status == 'active'){
 
-                }elseif($status->status == 'pending'){
-
-                    Alert::error('Oops', 'Your details are still being processed. Please wait for approval.')->persistent(true,false);
-                    return back();
-
-                }else{
-
-                    $request->session()->put('tutorId',$tutorId);
-                    Alert::toast("You're required to change your password before proceeding.", 'info')->persistent(false, true);
-
-                    return redirect('resetpassword');
-                    
-                    
+                        $request->session()->put('tutorId',$tutorId);
+                        return redirect('dashboard');
+    
+                    }elseif($tutorDetails->status == 'pending'){
+    
+                        Alert::error('Oops', 'Your details are still being processed. Please wait for approval.')->persistent(true,false);
+                        return back();
+    
+                    }else{
+    
+                        $request->session()->put('tutorId',$tutorId);
+                        Alert::toast("You're required to change your password before proceeding.", 'info')->persistent(false, true);
+    
+                        return redirect('resetpassword');
+                        
+                        
+                    }
                 }
+                
             }
-
+            
         } catch(\Illuminate\Database\QueryException $e){
 
             /*Catches errors */
@@ -117,10 +123,11 @@ class AuthController extends Controller
         
         $tutorId = $request->tutorId;
         $password = $request->password;
+        $hashedPassword = Hash::make($password);
 
         try{
             
-            DB::update('UPDATE tutors SET password = ?, status = ? where tutorId = ?', [$password, 'active', $tutorId]);
+            DB::update('UPDATE tutors SET password = ?, status = ? where tutorId = ?', [$hashedPassword, 'active', $tutorId]);
             Alert::success('Success', 'Password reset was successful.')->persistent(true,false);
 
             $request->session()->put('tutorId',$tutorId);

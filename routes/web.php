@@ -26,6 +26,7 @@ Route::middleware(['isLoggedIn'])->group(function () {
 
 Route::post('students/import', 'StudentsController@import');
 Route::post('students/new', 'StudentsController@newStudent');
+Route::post('approve/{tutorId}', 'TutorsController@approve');
 
 
 /* Authentication Routes */

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Laravel - A PHP Framework For Web Artisans
  *
@@ -60,4 +59,5 @@ $response->send();
 $kernel->terminate($request, $response);
 
 error_reporting(E_ALL);
-ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+ini_set("display_errors", 1);

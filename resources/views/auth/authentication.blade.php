@@ -146,7 +146,7 @@
                     </div>
                     <div class="card-body ml-3 mr-3">
                       <div class="form-group">
-                        <label class="bmd-label-floating"> Tutor ID *</label>
+                        <label class="bmd-label-floating"> User ID *</label>
                         <input type="text" class="form-control" id="email" name="tutorId" required="true">
                       </div>
                       <div class="form-group">

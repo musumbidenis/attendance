@@ -12,11 +12,11 @@
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^6.3.1|^7.0.1",
-        "imanghafoori/laravel-heyman": "^2.2",
         "laravel/framework": "^7.29",
         "laravel/tinker": "^2.5",
         "maatwebsite/excel": "^3.1",
-        "realrashid/sweet-alert": "^3.2"
+        "realrashid/sweet-alert": "^3.2",
+        "snowfire/beautymail": "^1.1"
     },
     "require-dev": {
         "facade/ignition": "^2.0",

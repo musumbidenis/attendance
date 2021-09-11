@@ -57,7 +57,7 @@
                               <form action="" method="post">
                                 {{ csrf_field() }}
 
-                                <button type="button" class="btn btn-danger btn-link" rel="tooltip" data-placement="bottom" title="Delete">
+                                <button type="submit" class="btn btn-danger btn-link" rel="tooltip" data-placement="bottom" title="Delete">
                                   <i class="material-icons">close</i>
                                 </button>
                               </form>
@@ -66,17 +66,17 @@
                               <form action="" method="post">
                                 {{ csrf_field() }}
 
-                                <button type="button" class="btn btn-success btn-link" rel="tooltip" data-placement="bottom" title="Edit">
+                                <button type="submit" class="btn btn-success btn-link" rel="tooltip" data-placement="bottom" title="Edit">
                                   <i class="material-icons">edit</i>
                                 </button>
                               </form>
                             </div>
                             @if ($tutor->status == 'pending')
                             <div class="float-right">
-                              <form action="" method="post">
+                              <form action="/approve/{{$tutor->tutorId}}" method="post">
                                 {{ csrf_field() }}
-                                
-                                <button type="button" class="btn btn-info btn-link" rel="tooltip" data-placement="bottom" title="Approve">
+
+                                <button type="submit" class="btn btn-info btn-link" rel="tooltip" data-placement="bottom" title="Approve">
                                   <i class="material-icons">check_box</i>
                                 </button>
                               </form>
