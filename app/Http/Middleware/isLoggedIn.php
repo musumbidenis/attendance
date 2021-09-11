@@ -16,7 +16,7 @@ class isLoggedIn
      */
     public function handle($request, Closure $next)
     {
-        if(session()->has('tutorId')){
+        if(session()->has('userDetails')){
             return $next($request);
         }
 

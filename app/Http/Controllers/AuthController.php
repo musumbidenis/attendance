@@ -64,9 +64,9 @@ class AuthController extends Controller
         $tutorId = $request->tutorId;
         $password = $request->password;
 
-        try{
+        $tutorDetails = Tutor::where('tutorId', $tutorId)->get()->first();
 
-            $tutorDetails = Tutor::where('tutorId', $tutorId)->get()->first();
+        try{
 
             if ($tutorDetails == null) {
 
@@ -84,7 +84,7 @@ class AuthController extends Controller
 
                     if($tutorDetails->status == 'active'){
 
-                        $request->session()->put('tutorId',$tutorId);
+                        $request->session()->put('userDetails',$tutorDetails);
                         return redirect('dashboard');
     
                     }elseif($tutorDetails->status == 'pending'){
@@ -94,7 +94,7 @@ class AuthController extends Controller
     
                     }else{
     
-                        $request->session()->put('tutorId',$tutorId);
+                        $request->session()->put('userDetails',$tutorDetails);
                         Alert::toast("You're required to change your password before proceeding.", 'info')->persistent(false, true);
     
                         return redirect('resetpassword');
@@ -125,12 +125,14 @@ class AuthController extends Controller
         $password = $request->password;
         $hashedPassword = Hash::make($password);
 
+        $tutorDetails = Tutor::where('tutorId', $tutorId)->get()->first();
+
         try{
             
             DB::update('UPDATE tutors SET password = ?, status = ? where tutorId = ?', [$hashedPassword, 'active', $tutorId]);
             Alert::success('Success', 'Password reset was successful.')->persistent(true,false);
 
-            $request->session()->put('tutorId',$tutorId);
+            $request->session()->put('userDetails',$tutorDetails);
             return redirect('dashboard');
 
         } catch(\Illuminate\Database\QueryException $e){

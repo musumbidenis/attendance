@@ -17,10 +17,9 @@ class isAdmin
      */
     public function handle($request, Closure $next)
     {
-        $tutorId = $request->session()->get('tutorId');
-        $role = Tutor::select('role')->where('tutorId', $tutorId)->get()->first();
+        $userDetails = $request->session()->get('userDetails');
 
-        if($role->role == 'admin'){
+        if($userDetails->role == 'admin'){
 
             return $next($request);
 
