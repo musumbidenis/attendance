@@ -30,9 +30,9 @@ Route::post('approve/{tutorId}', 'TutorsController@approve');
 
 
 /* Authentication Routes */
-Route::get('login', 'PagesController@login');
-Route::get('register', 'PagesController@register');
-Route::get('resetpassword', 'PagesController@resetPassword')->middleware('isLoggedIn');
+Route::get('login', 'AuthController@loginPage');
+Route::get('register', 'AuthController@registerPage');
+Route::get('resetpassword', 'AuthController@resetPasswordPage')->middleware('isLoggedIn');
 Route::get('logout', 'AuthController@logout');
 
 Route::post('login', 'AuthController@login');

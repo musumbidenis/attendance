@@ -10,6 +10,30 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class AuthController extends Controller
 {
+    /*GET
+    */
+    public function registerPage(Request $request)
+    {
+        $courses = DB::select('select * from courses');
+        
+        return view('auth.authentication',['courses'=>$courses]);
+    }
+
+    /*GET
+    */
+    public function loginPage()
+    {
+        return view('auth.authentication');
+    }
+
+    /*GET
+    */
+    public function resetPasswordPage()
+    {
+        return view('auth.authentication');
+    }
+
+
     /**
      * Adds New Tutor Record
     */

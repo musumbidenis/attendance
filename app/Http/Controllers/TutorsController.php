@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DB;
 use Mail;
+use App\Unit;
 use App\Tutor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -54,5 +55,68 @@ class TutorsController extends Controller
        Alert::success('Success','Approval was succesfull. Login credentials emailed to the tutor.');
        return back();
         
+    }
+
+    /**
+     * Tutor creates a lesson
+    */
+    public function createLesson(Request $request)
+    {
+       $sessionId   = $request->get('sessionId');
+       $serviceCode = $request->get('serviceCode');
+       $phoneNumber = $request->get('phoneNumber');
+       $text        = $request->get('text');
+       
+        // use explode to split the string text response from Africa's talking gateway into an array.
+        $ussd_string_exploded = explode("*", $text);
+        // Get ussd menu level number from the gateway
+        $level = count($ussd_string_exploded);
+
+        if ($text == "") {
+            // first response when a user dials our ussd code
+            $response  = "CON Welcome. Select category \n";
+            $response .= "1. Tutor \n";
+            $response .= "2. Student";
+        }
+        elseif ($text == "1") {
+            // If user selected 1 send them to the tutor menu
+            $response = "CON Please enter your Tutor ID";
+        }
+        elseif ($ussd_string_exploded[0] == 1 && $level == 2) {
+            $tutorId = $ussd_string_exploded[1];
+            
+            $units = Unit::where('tutorId', $tutorId)->get();
+
+            $response  = "CON Select unit to create a lesson \n";
+            $response .= "1. $units->unitCode";
+        }
+        elseif ($ussd_string_exploded[0] == 1 && $ussd_string_exploded[1] == 1 && $level == 4) {
+            $response = "CON Please enter your email";
+        }
+        elseif ($ussd_string_exploded[0] == 1 && $ussd_string_exploded[1] == 1 && $level == 5) {
+            // save data in the database
+            $response = "END Your data has been captured successfully! Thank you for registering for Django online classes at HLAB.";
+        }
+        elseif ($text == "1*2") {
+            // when use response with option Laravel
+            $response = "CON Please enter your first name. ";
+        }
+        elseif ($ussd_string_exploded[0] == 1 && $ussd_string_exploded[1] == 2 && $level == 3) {
+            $response = "CON Please enter your last name";
+        }
+        elseif ($ussd_string_exploded[0] == 1 && $ussd_string_exploded[1] == 2 && $level == 4) {
+            $response = "CON Please enter your email";
+        }
+        elseif ($ussd_string_exploded[0] == 1 && $ussd_string_exploded[1] == 2 && $level == 5) {
+            // save data in the database
+            $response = "END Your data has been captured successfully! Thank you for registering for Laravel online classes at HLAB.";
+        }
+        elseif ($text == "2") {
+            //If user selected 2, send them to the student menu
+            $response = "CON Please enter your Admission Number";
+        }
+        // send your response back to the API
+        header('Content-type: text/plain');
+        echo $response;
     }
 }
