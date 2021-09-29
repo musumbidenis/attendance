@@ -20,6 +20,8 @@ Route::middleware(['isLoggedIn'])->group(function () {
     Route::get('dashboard', 'PagesController@dashboard');
     Route::get('users/tutors', 'TutorsController@tutors');
     Route::get('users/students', 'StudentsController@students');
+    Route::get('academics/courses', 'AcademicsController@courses');
+    Route::get('academics/units', 'AcademicsController@units');
     
 });
 
@@ -28,6 +30,8 @@ Route::post('students/import', 'StudentsController@import');
 Route::post('tutors/import', 'TutorsController@import');
 Route::post('students/new', 'StudentsController@newStudent');
 Route::post('tutors/new', 'TutorsController@newTutor');
+Route::post('courses/new', 'AcademicsController@newCourse');
+Route::post('units/new', 'AcademicsController@newUnit');
 Route::post('approve/{tutorId}', 'TutorsController@approve');
 
 

@@ -11,8 +11,7 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class AuthController extends Controller
 {
-    /*GET
-    */
+    /** Authentication Pages */
     public function registerPage(Request $request)
     {
         $courses = DB::select('select * from courses');
@@ -20,29 +19,23 @@ class AuthController extends Controller
         return view('auth.authentication',['courses'=>$courses]);
     }
 
-    /*GET
-    */
     public function loginPage()
     {
         return view('auth.authentication');
     }
 
-    /*GET
-    */
     public function adminLoginPage()
     {
         return view('auth.admin');
     }
 
-    /*GET
-    */
     public function resetPasswordPage()
     {
         return view('auth.authentication');
     }
 
 
-    /** Adds New Tutor Record */
+    /** Add New Tutor Record */
     public function register(Request $request)
     {
         $tutor = new Tutor();
@@ -57,7 +50,7 @@ class AuthController extends Controller
 
         try{
             
-            /*Adds record to db*/
+            /*Add record to db*/
             $tutor->save();
             Alert::success('Success','Details have been submitted successfully. An email will be sent with your login credentials upon approval.');
             return redirect('login');
@@ -66,13 +59,13 @@ class AuthController extends Controller
 
             $errorCode = $e->errorInfo[1];
 
-            /*Catches duplicate error */
+            /*Catch duplicate error */
             if($errorCode == '1062'){
 
                 Alert::error('Oops', 'Tutor ID ' .$request->tutorId. ' is already registered. Please login to continue.')->persistent(true,false);
                 return redirect('login');
 
-            /*Catches all other errors */
+            /*Catch all other errors */
             }else{
 
                 Alert::error('Oops', $e->errorInfo[2])->persistent(true,false);
@@ -146,19 +139,19 @@ class AuthController extends Controller
      /**  Authenticate Admin Credentials */
      public function admin(Request $request)
      {
-         $userId = $request->userId;
-         $password = $request->password;
+        $userId = $request->userId;
+        $password = $request->password;
  
-         $adminDetails = Admin::where('userId', $userId)->get()->first();
+        $adminDetails = Admin::where('userId', $userId)->get()->first();
  
-         try{
+        try{
  
-             if ($adminDetails == null) {
+            if ($adminDetails == null) {
  
-                 Alert::error('Oops', 'Invalid User ID. Please try again.')->persistent(true,false);
-                 return back();
+                Alert::error('Oops', 'Invalid User ID. Please try again.')->persistent(true,false);
+                return back();
  
-             }else{
+            }else{
  
                 //  if (!Hash::check($password, $adminDetails->password)) {
 
@@ -167,14 +160,14 @@ class AuthController extends Controller
                     Alert::error('Oops', 'Invalid Password. Please try again.')->persistent(true,false);
                     return back();
                     
-                 }else {
+                }else {
  
                     $request->session()->put('userDetails',$adminDetails);
                     return redirect('dashboard');
 
-                 }
+                }
                  
-             }
+            }
              
          } catch(\Illuminate\Database\QueryException $e){
  
@@ -206,7 +199,7 @@ class AuthController extends Controller
 
         } catch(\Illuminate\Database\QueryException $e){
 
-            /*Catches errors */
+            /*Catch errors */
             Alert::error('Oops', $e->errorInfo[2])->persistent(true,false);
             return back();
                 
@@ -218,7 +211,10 @@ class AuthController extends Controller
     /** Logout user */
     public function logout(Request $request)
     {
+        
         $request->session()->flush();
         return redirect('login');
+
     }
+
 }

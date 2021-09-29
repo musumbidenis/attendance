@@ -38,7 +38,7 @@ class TutorsController extends Controller
         try{
             
             $tutor->save();
-            Alert::success('Tutor record inserted successfully');
+            Alert::success('Success', 'Tutor record inserted successfully');
 
         } catch(\Illuminate\Database\QueryException $e){
 
