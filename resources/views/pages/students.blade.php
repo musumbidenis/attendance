@@ -124,7 +124,7 @@
 
                                     <h3 class="title text-center">Or Use Form</h3>
 
-                                    <form id="addStudent" method="post" action="{{ url('/tutors') }}">
+                                    <form id="addStudent" method="post" action="{{ url('/students/new') }}">
                                       {{ csrf_field() }}
 
                                       <div class="card-body ">

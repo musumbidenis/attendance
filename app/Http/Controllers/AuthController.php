@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use DB;
+use App\Admin;
 use App\Tutor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -28,15 +29,20 @@ class AuthController extends Controller
 
     /*GET
     */
+    public function adminLoginPage()
+    {
+        return view('auth.admin');
+    }
+
+    /*GET
+    */
     public function resetPasswordPage()
     {
         return view('auth.authentication');
     }
 
 
-    /**
-     * Adds New Tutor Record
-    */
+    /** Adds New Tutor Record */
     public function register(Request $request)
     {
         $tutor = new Tutor();
@@ -80,9 +86,7 @@ class AuthController extends Controller
     }
 
 
-    /**
-     * Authenticates Credentials
-    */
+    /**  Authenticate Tutor Credentials */
     public function login(Request $request)
     {
         $tutorId = $request->tutorId;
@@ -131,7 +135,7 @@ class AuthController extends Controller
             
         } catch(\Illuminate\Database\QueryException $e){
 
-            /*Catches errors */
+            /*Catch errors */
             Alert::error('Oops', $e->errorInfo[2])->persistent(true,false);
             return back();
                 
@@ -139,9 +143,50 @@ class AuthController extends Controller
 
     }
 
-    /**
-     * Resets Password
-    */
+     /**  Authenticate Admin Credentials */
+     public function admin(Request $request)
+     {
+         $userId = $request->userId;
+         $password = $request->password;
+ 
+         $adminDetails = Admin::where('userId', $userId)->get()->first();
+ 
+         try{
+ 
+             if ($adminDetails == null) {
+ 
+                 Alert::error('Oops', 'Invalid User ID. Please try again.')->persistent(true,false);
+                 return back();
+ 
+             }else{
+ 
+                //  if (!Hash::check($password, $adminDetails->password)) {
+
+                if ($password != $adminDetails->password) {
+ 
+                    Alert::error('Oops', 'Invalid Password. Please try again.')->persistent(true,false);
+                    return back();
+                    
+                 }else {
+ 
+                    $request->session()->put('userDetails',$adminDetails);
+                    return redirect('dashboard');
+
+                 }
+                 
+             }
+             
+         } catch(\Illuminate\Database\QueryException $e){
+ 
+            /*Catch errors */
+            Alert::error('Oops', $e->errorInfo[2])->persistent(true,false);
+            return back();
+                
+         }
+ 
+     }
+
+    /** Reset Password */
     public function resetPassword(Request $request)
     {
         
@@ -170,9 +215,7 @@ class AuthController extends Controller
     }
 
 
-    /**
-     * Logsout user
-    */
+    /** Logout user */
     public function logout(Request $request)
     {
         $request->session()->flush();

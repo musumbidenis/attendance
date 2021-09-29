@@ -8,12 +8,14 @@ use App\Unit;
 use App\Tutor;
 Use App\Lesson;
 use Illuminate\Http\Request;
+use App\Imports\TutorImports;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class TutorsController extends Controller
 {
-    /** Fetches Tutors records from DB */
+    /** Fetch Tutors records from DB */
     public function tutors(Request $request)
     {
         $tutors = DB::select('select * from tutors');
@@ -21,6 +23,64 @@ class TutorsController extends Controller
 
         return view('pages.tutors',['tutors'=>$tutors, 'courses'=>$courses]);
     }
+
+    /** Add New Tutor Record from Form */
+    public function newTutor(Request $request)
+    {
+        $tutor = new Tutor();
+        $tutor->tutorId = $request->tutorId;
+        $tutor->firstname = $request->firstName;
+        $tutor->surname = $request->surname;
+        $tutor->email = $request->email;
+        $tutor->phone = $request->phone;
+        $tutor->courseCode = $request->courseCode;
+
+        try{
+            
+            $tutor->save();
+            Alert::success('Tutor record inserted successfully');
+
+        } catch(\Illuminate\Database\QueryException $e){
+
+            $errorCode = $e->errorInfo[1];
+
+            if($errorCode == '1062'){
+                Alert::error('Oops', 'Duplicate Entry for '.$request->tutorId)->persistent(true,false);
+            }else{
+                Alert::error('Oops', $e->errorInfo[2])->persistent(true,false);
+            }
+        }
+
+        return back();
+    }
+
+        /** Import new tutors from excel */
+        public function import(Request $request)
+        {
+            $this->validate($request, [
+                'excel'  => 'required|mimes:xls,xlsx'
+               ]);
+    
+            try{
+    
+                Excel::import(new TutorImports ,$request->file('excel'));
+                Alert::success('Success', 'Tutors records inserted successfully');
+    
+            } catch(\Illuminate\Database\QueryException $e){
+    
+                $errorCode = $e->errorInfo[1];
+    
+                if($errorCode == '1062'){
+                    Alert::error('Duplicate Entry', $e->errorInfo[2])->persistent(true,false);
+                }else{
+                    Alert::error('Oops', $e->errorInfo[2])->persistent(true,false);
+                }
+                  
+            }
+       
+               
+            return back();
+        }
 
     /** Fetch Tutors records from DB */
     public function approve($tutorId)
@@ -93,12 +153,11 @@ class TutorsController extends Controller
 
         }
 
-        // // send your response back to the API
-        // header('Content-type: text/plain');
     }
 
     /** Tutor USSD Menu */
-    Public function tutorMenu($ussd_string_exploded, $phoneNumber){
+    Public function tutorMenu($ussd_string_exploded, $phoneNumber)
+    {
         // Get ussd menu level number from the gateway
         $level = count($ussd_string_exploded);
 

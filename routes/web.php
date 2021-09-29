@@ -25,16 +25,20 @@ Route::middleware(['isLoggedIn'])->group(function () {
 
 
 Route::post('students/import', 'StudentsController@import');
+Route::post('tutors/import', 'TutorsController@import');
 Route::post('students/new', 'StudentsController@newStudent');
+Route::post('tutors/new', 'TutorsController@newTutor');
 Route::post('approve/{tutorId}', 'TutorsController@approve');
 
 
 /* Authentication Routes */
 Route::get('login', 'AuthController@loginPage');
+Route::get('admin', 'AuthController@adminLoginPage');
 Route::get('register', 'AuthController@registerPage');
 Route::get('resetpassword', 'AuthController@resetPasswordPage')->middleware('isLoggedIn');
 Route::get('logout', 'AuthController@logout');
 
 Route::post('login', 'AuthController@login');
+Route::post('admin', 'AuthController@admin');
 Route::post('register', 'AuthController@register');
 Route::post('resetpassword', 'AuthController@resetPassword');
