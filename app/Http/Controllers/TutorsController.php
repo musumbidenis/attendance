@@ -13,9 +13,7 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class TutorsController extends Controller
 {
-    /**
-     * Fetches Tutors records from DB
-    */
+    /** Fetches Tutors records from DB */
     public function tutors(Request $request)
     {
         $tutors = DB::select('select * from tutors');
@@ -24,9 +22,7 @@ class TutorsController extends Controller
         return view('pages.tutors',['tutors'=>$tutors, 'courses'=>$courses]);
     }
 
-    /**
-     * Fetches Tutors records from DB
-    */
+    /** Fetch Tutors records from DB */
     public function approve($tutorId)
     {
 
@@ -58,9 +54,7 @@ class TutorsController extends Controller
         
     }
 
-    /**
-     * Tutor creates a lesson
-    */
+    /** USSD Functionality*/
     public function createLesson(Request $request)
     {
        $sessionId   = $request->get('sessionId');
@@ -74,7 +68,7 @@ class TutorsController extends Controller
         if ($text == "") {
 
             // first response when a user dials our ussd code
-            $response  = "CON Welcome. Reply with \n";
+            $response  = "CON Welcome. Reply with: \n";
             $response .= "1. Tutor \n";
             $response .= "2. Student";
 
@@ -89,7 +83,7 @@ class TutorsController extends Controller
                     break;
                 case 2:
                     //Student Menu
-                    $this->studentMenu($ussd_string_exploded);
+                    $this->studentMenu($ussd_string_exploded, $phoneNumber);
                     break;
                 default:
                     //Invalid choice
@@ -109,7 +103,9 @@ class TutorsController extends Controller
         $level = count($ussd_string_exploded);
 
         if ($level == 1) {
-           echo "CON Enter your Tutor ID";
+
+           echo "CON Enter your Tutor ID:";
+
         }elseif ($level == 2) {
 
             //Verify the Tutor ID
@@ -138,7 +134,7 @@ class TutorsController extends Controller
 
                     $i = 1;
 
-                    $response  = "CON Select unit to create a lesson.\n";
+                    $response  = "CON Select unit to create a lesson:\n";
                     foreach ($units as $unit) {
                         $response .= "$i. $unit->unitCode \n";
                         $i++;
@@ -196,11 +192,11 @@ class TutorsController extends Controller
 
                 $lesson->save();
 
-                echo "END Lesson for $unitCode has been created successfully";
+                echo "END Lesson for $unitCode has been created successfully.";
 
             }else{
 
-                echo "END You canceled lesson creation process";
+                echo "END You canceled lesson creation process.";
 
             }
         }
@@ -212,7 +208,9 @@ class TutorsController extends Controller
         $level = count($ussd_string_exploded);
 
         if ($level == 1) {
-            echo "Enter your admission number in the format";
+
+            echo "CON Enter your admission number in the format, e.g ci/xxxxx/20xx";
+
         }
     }
 }
