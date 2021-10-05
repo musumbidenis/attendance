@@ -11,18 +11,18 @@
                     <br />
                     <ul class="nav nav-pills nav-pills-info nav-pills-icons justify-content-center" role="tablist">
                       <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#search" role="tablist">
+                        <a class="nav-link active" data-toggle="tab" href="#search" role="tablist">
                           <i class="material-icons">search</i> Search
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link active" data-toggle="tab" href="#new" role="tablist">
+                        <a class="nav-link" data-toggle="tab" href="#new" role="tablist">
                           <i class="material-icons">person_add</i> New Course
                         </a>
                       </li>
                     </ul>
                     <div class="tab-content tab-space tab-subcategories">
-                      <div class="tab-pane" id="search">
+                      <div class="tab-pane active" id="search">
                         <div class="content">
                           <div class="container-fluid">
                             <div class="row">
@@ -70,13 +70,9 @@
                                                   </form>
                                                 </div>
                                                 <div class="float-right">
-                                                  <form action="" method="post">
-                                                    {{ csrf_field() }}
-                    
-                                                    <button type="submit" class="btn btn-success btn-link" rel="tooltip" data-placement="bottom" title="Edit">
+                                                    <button id="editButton" type="submit" class="btn btn-success btn-link" rel="tooltip" data-placement="bottom" title="Edit">
                                                       <i class="material-icons">edit</i>
                                                     </button>
-                                                  </form>
                                                 </div>
                                                 
                                               </td>
@@ -85,6 +81,50 @@
                                         </tbody>
                                       </table>
                                     </div>
+
+                                    <!-- Edit modal start -->
+                                    <form id="editCourse" method="post" class="horizontal" action="{{ url('/courses/update') }}">
+                                      {{ csrf_field() }}
+                                      
+                                      <div id="editModal" class="modal" tabindex="-1" role="dialog">
+                                        <div class="modal-dialog" role="document">
+                                          <div class="modal-content">
+                                            <div class="modal-header">
+                                              <h5 class="modal-title">Edit Course</h5>
+                                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                              </button>
+                                            </div>
+                                            <div class="modal-body">
+                                              <div class="card-body ">
+                                                <div class="row">
+                                                  <label class="col-md-3 col-form-label"> Course Code *</label>
+                                                  <div class="col-md-9">
+                                                    <div class="form-group has-default">
+                                                      <input type="text" class="form-control" id="courseCode" name="courseCode" required="true" disabled>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div class="row">
+                                                  <label class="col-md-3 col-form-label"> Description *</label>
+                                                  <div class="col-md-9">
+                                                    <div class="form-group has-default">
+                                                      <input type="text" class="form-control" id="description" name="description" required="true">
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div class="category form-category">* Required fields</div>
+                                              </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                              <button type="submit" id="saveChanges" class="btn btn-primary">Save changes</button>
+                                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </form>
+                                    <!-- Edit modal end -->
                                   </div>
                                 </div>
                               </div>
@@ -92,7 +132,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="tab-pane active" id="new">
+                      <div class="tab-pane" id="new">
                         <div class="content">
                           <div class="container-fluid">
                             <div class="row">
@@ -106,7 +146,7 @@
                                   </div>
                                   <div class="file-import col-md-12 mr-auto ml-auto">
 
-                                    <form id="addCourse" method="post" action="{{ url('/courses/new') }}">
+                                    <form id="addCourse" method="post" class="horizontal" action="{{ url('/courses/new') }}">
                                       {{ csrf_field() }}
 
                                       <div class="card-body ">
@@ -136,6 +176,7 @@
               </div>
             </div>
           </div>
+        </div>
   @endsection
 @section('scripts')
 <script src="../../assets/js/plugins/jquery.dataTables.min.js"></script>
@@ -161,6 +202,7 @@
       }
       $(document).ready(function() {
         setFormValidation('#addCourse');
+        setFormValidation('#editCourse');
       });
     </script>
     <script>
@@ -171,33 +213,38 @@
             [10, 25, 50, -1],
             [10, 25, 50, "All"]
           ],
+          "bDestroy": true,
           responsive: true,
           language: {
             search: "_INPUT_",
             searchPlaceholder: "Search records",
           }
         });
+      });
 
-        var table = $('#datatable').DataTable();
+      var table = $('#datatables').DataTable();
 
         // Edit record
-        table.on('click', '.edit', function() {
-          $tr = $(this).closest('tr');
-          var data = table.row($tr).data();
-          alert('You press on Row: ' + data[0] + ' ' + data[1] + ' ' + data[2] + '\'s row.');
-        });
+      table.on('click', '#editButton', function() {
 
-        // Delete a record
-        table.on('click', '.remove', function(e) {
-          $tr = $(this).closest('tr');
-          table.row($tr).remove().draw();
-          e.preventDefault();
-        });
+        $('#editModal').modal('show');
 
-        //Like record
-        table.on('click', '.like', function() {
-          alert('You clicked on Like button');
-        });
+        $tr = $(this).closest('tr');
+        var data = $tr.children("td").map(function(){
+          return $(this).text();
+        }).get();
+        
+        $('#courseCode').val(data[0]);
+        $('#description').val(data[1]);
+
       });
+
+      $('#saveChanges').click(function(){
+
+        var courseCode = $('#courseCode').val();
+        var description = $('#description').val();
+
+      });
+
     </script>
 @endsection

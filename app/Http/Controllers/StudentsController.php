@@ -15,7 +15,7 @@ class StudentsController extends Controller
     /**
      * Fetches Students records from DB
     */
-    public function students(Request $request)
+    public function studentsPage(Request $request)
     {
         $courses = DB::select('select * from courses');
 

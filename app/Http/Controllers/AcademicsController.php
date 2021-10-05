@@ -11,7 +11,7 @@ use RealRashid\SweetAlert\Facades\Alert;
 class AcademicsController extends Controller
 {
     /** Courses && Units Pages */
-    public function courses()
+    public function coursesPage()
     {
         $courses = DB::select('select * from courses');
 
@@ -19,7 +19,7 @@ class AcademicsController extends Controller
 
     }
 
-    public function units()
+    public function unitsPage()
     {
         $units = DB::select('select * from units');
         $courses = DB::select('select * from courses');
@@ -80,5 +80,19 @@ class AcademicsController extends Controller
         }
 
         return back();
+    }
+
+    /** Add new Course to db */
+    public function updateCourse(Request $request)
+    {
+
+        $courseCode = $request->courseCode;
+        $description = $request->description;
+
+        DB::update('UPDATE courses SET description = ? where courseCode = ?', [$description, $courseCode]);
+
+        Alert::success('Success', 'Update was successful.');
+        return back();
+        
     }
 }
