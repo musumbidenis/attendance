@@ -101,7 +101,8 @@
                                                   <label class="col-md-3 col-form-label"> Course Code *</label>
                                                   <div class="col-md-9">
                                                     <div class="form-group has-default">
-                                                      <input type="text" class="form-control" id="courseCode" name="courseCode" required="true" disabled>
+                                                      <input type="text" class="form-control" id="courseCode" name="courseCode" required="true" hidden>
+                                                      <input type="text" class="form-control" id="courseCode2" required="true" disabled>
                                                     </div>
                                                   </div>
                                                 </div>
@@ -164,6 +165,7 @@
                                         <button type="submit" class="btn btn-primary">Save</button>
                                       </div>
                                     </form>
+                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -224,7 +226,7 @@
 
       var table = $('#datatables').DataTable();
 
-        // Edit record
+      // Edit record
       table.on('click', '#editButton', function() {
 
         $('#editModal').modal('show');
@@ -235,14 +237,8 @@
         }).get();
         
         $('#courseCode').val(data[0]);
+        $('#courseCode2').val(data[0]);
         $('#description').val(data[1]);
-
-      });
-
-      $('#saveChanges').click(function(){
-
-        var courseCode = $('#courseCode').val();
-        var description = $('#description').val();
 
       });
 

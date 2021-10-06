@@ -89,9 +89,22 @@ class AcademicsController extends Controller
         $courseCode = $request->courseCode;
         $description = $request->description;
 
-        DB::update('UPDATE courses SET description = ? where courseCode = ?', [$description, $courseCode]);
+       
+        try{
+            
+            DB::update('UPDATE courses SET description = ? where courseCode = ?', [$description, $courseCode]);
 
-        Alert::success('Success', 'Update was successful.');
+            Alert::success('Success', 'Update was successful.');
+
+
+        } catch(\Illuminate\Database\QueryException $e){
+
+            $errorCode = $e->errorInfo[1];
+
+            Alert::error('Oops', $e->errorInfo[2])->persistent(true,false);
+            
+        }
+
         return back();
         
     }
