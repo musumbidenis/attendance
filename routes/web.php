@@ -30,6 +30,7 @@ Route::post('students/import', 'StudentsController@import');
 Route::post('tutors/import', 'TutorsController@import');
 Route::post('students/new', 'StudentsController@newStudent');
 Route::post('tutors/new', 'TutorsController@newTutor');
+Route::post('tutors/update', 'TutorsController@updateTutor');
 Route::post('courses/new', 'AcademicsController@newCourse');
 Route::post('courses/update', 'AcademicsController@updateCourse');
 Route::post('units/new', 'AcademicsController@newUnit');

@@ -11,18 +11,18 @@
                     <br />
                     <ul class="nav nav-pills nav-pills-info nav-pills-icons justify-content-center" role="tablist">
                       <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#search" role="tablist">
+                        <a class="nav-link active" data-toggle="tab" href="#search" role="tablist">
                           <i class="material-icons">search</i> Search
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link active" data-toggle="tab" href="#new" role="tablist">
+                        <a class="nav-link" data-toggle="tab" href="#new" role="tablist">
                           <i class="material-icons">person_add</i> New Tutor
                         </a>
                       </li>
                     </ul>
                     <div class="tab-content tab-space tab-subcategories">
-                      <div class="tab-pane" id="search">
+                      <div class="tab-pane active" id="search">
                         <div class="content">
                           <div class="container-fluid">
                             <div class="row">
@@ -79,21 +79,91 @@
                                                   </form>
                                                 </div>
                                                 <div class="float-right">
-                                                  <form action="" method="post">
-                                                    {{ csrf_field() }}
-                    
-                                                    <button type="submit" class="btn btn-success btn-link" rel="tooltip" data-placement="bottom" title="Edit">
-                                                      <i class="material-icons">edit</i>
-                                                    </button>
-                                                  </form>
+                                                  <button id="editButton" class="btn btn-success btn-link" rel="tooltip" data-placement="bottom" title="Edit">
+                                                    <i class="material-icons">edit</i>
+                                                  </button>
                                                 </div>
-                                                
                                               </td>
                                             </tr>
                                           @endforeach
                                         </tbody>
                                       </table>
                                     </div>
+
+                                    <!-- Edit modal start -->
+                                    <form id="editTutor" method="post" class="horizontal" action="{{ url('/tutors/update') }}">
+                                      {{ csrf_field() }}
+                                      
+                                      <div id="editModal" class="modal" tabindex="-1" role="dialog">
+                                        <div class="modal-dialog" role="document">
+                                          <div class="modal-content">
+                                            <div class="modal-header">
+                                              <h5 class="modal-title">Edit Tutor</h5>
+                                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                              </button>
+                                            </div>
+                                            <div class="modal-body">
+                                              <div class="card-body ">
+                                                <div class="row">
+                                                  <label class="col-md-3 col-form-label"> Tutor Id *</label>
+                                                  <div class="col-md-9">
+                                                    <div class="form-group has-default">
+                                                      <input type="text" class="form-control" id="tutorId" name="tutorId" required="true" hidden>
+                                                      <input type="text" class="form-control" id="tutorId2" required="true" disabled>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div class="row">
+                                                  <label class="col-md-3 col-form-label"> First Name *</label>
+                                                  <div class="col-md-9">
+                                                    <div class="form-group has-default">
+                                                      <input type="text" class="form-control" id="firstName" name="firstName" required="true">
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div class="row">
+                                                  <label class="col-md-3 col-form-label"> Surname *</label>
+                                                  <div class="col-md-9">
+                                                    <div class="form-group has-default">
+                                                      <input type="text" class="form-control" id="surname" name="surname" required="true">
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div class="row">
+                                                  <label class="col-md-3 col-form-label"> Email *</label>
+                                                  <div class="col-md-9">
+                                                    <div class="form-group has-default">
+                                                      <input type="text" class="form-control" id="email" name="email" required="true">
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div class="row">
+                                                  <label class="col-md-3 col-form-label"> Course *</label>
+                                                  <div class="col-md-9">
+                                                    <div class="form-group has-default">
+                                                      <select class="selectpicker" id="courseCode" name="courseCode" data-size="7" data-style="select-with-transition" title="Choose your course" required="true">
+                                                        <option disabled selected>Select Course</option>
+                                                        @foreach ($courses as $course)
+                                                        <option value={{$course->courseCode}}>{{$course->description}}</option>
+                                                        @endforeach
+                                                      </select>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div class="category form-category">* Required fields</div>
+                                              </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                              <button type="submit" id="saveChanges" class="btn btn-primary">Save changes</button>
+                                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </form>
+                                    <!-- Edit modal end -->
+
                                   </div>
                                 </div>
                               </div>
@@ -101,7 +171,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="tab-pane active" id="new">
+                      <div class="tab-pane" id="new">
                         <div class="content">
                           <div class="container-fluid">
                             <div class="row">
@@ -207,6 +277,7 @@
       $(document).ready(function() {
         setFormValidation('#importTutors');
         setFormValidation('#addTutor');
+        setFormValidation('#editTutor');
       });
     </script>
     <script>
@@ -217,6 +288,7 @@
             [10, 25, 50, -1],
             [10, 25, 50, "All"]
           ],
+          "bDestroy": true,
           responsive: true,
           language: {
             search: "_INPUT_",
@@ -224,25 +296,26 @@
           }
         });
 
-        var table = $('#datatable').DataTable();
+        var table = $('#datatables').DataTable();
 
         // Edit record
-        table.on('click', '.edit', function() {
-          $tr = $(this).closest('tr');
-          var data = table.row($tr).data();
-          alert('You press on Row: ' + data[0] + ' ' + data[1] + ' ' + data[2] + '\'s row.');
-        });
+        table.on('click', '#editButton', function() {
 
-        // Delete a record
-        table.on('click', '.remove', function(e) {
-          $tr = $(this).closest('tr');
-          table.row($tr).remove().draw();
-          e.preventDefault();
-        });
+          $('#editModal').modal('show');
 
-        //Like record
-        table.on('click', '.like', function() {
-          alert('You clicked on Like button');
+          $tr = $(this).closest('tr');
+          var data = $tr.children("td").map(function(){
+            return $(this).text();
+          }).get();
+          
+          $('#tutorId').val(data[0]);
+          $('#tutorId2').val(data[0]);
+          $('#courseCode2').val(data[0]);
+          $('#firstName').val(data[1]);
+          $('#surname').val(data[2]);
+          $('#email').val(data[3]);
+          $('#courseCode').val(data[4]);
+
         });
       });
     </script>
@@ -250,13 +323,13 @@
 
 
 {{-- @if ($tutor->status == 'pending')
-                            <div class="float-right">
-                              <form action="/approve/{{$tutor->tutorId}}" method="post">
-                                {{ csrf_field() }}
+<div class="float-right">
+  <form action="/approve/{{$tutor->tutorId}}" method="post">
+    {{ csrf_field() }}
 
-                                <button type="submit" class="btn btn-info btn-link" rel="tooltip" data-placement="bottom" title="Approve">
-                                  <i class="material-icons">check_box</i>
-                                </button>
-                              </form>
-                            </div>
-                            @endif --}}
+    <button type="submit" class="btn btn-info btn-link" rel="tooltip" data-placement="bottom" title="Approve">
+      <i class="material-icons">check_box</i>
+    </button>
+  </form>
+</div>
+@endif --}}

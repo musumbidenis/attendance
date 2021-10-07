@@ -82,7 +82,7 @@ class AcademicsController extends Controller
         return back();
     }
 
-    /** Add new Course to db */
+    /** Update Course to db */
     public function updateCourse(Request $request)
     {
 

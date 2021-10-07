@@ -62,33 +62,64 @@ class TutorsController extends Controller
         return back();
     }
 
-        /** Import new tutors from excel */
-        public function import(Request $request)
-        {
-            $this->validate($request, [
-                'excel'  => 'required|mimes:xls,xlsx'
-               ]);
+    /** Import new tutors from excel */
+    public function import(Request $request)
+    {
+        $this->validate($request, [
+            'excel'  => 'required|mimes:xls,xlsx'
+        ]);
     
-            try{
+        try{
     
-                Excel::import(new TutorImports ,$request->file('excel'));
-                Alert::success('Success', 'Tutors records inserted successfully');
+            Excel::import(new TutorImports ,$request->file('excel'));
+            Alert::success('Success', 'Tutors records inserted successfully');
     
-            } catch(\Illuminate\Database\QueryException $e){
+        } catch(\Illuminate\Database\QueryException $e){
     
-                $errorCode = $e->errorInfo[1];
+            $errorCode = $e->errorInfo[1];
     
-                if($errorCode == '1062'){
-                    Alert::error('Duplicate Entry', $e->errorInfo[2])->persistent(true,false);
-                }else{
-                    Alert::error('Oops', $e->errorInfo[2])->persistent(true,false);
-                }
-                  
+            if($errorCode == '1062'){
+                Alert::error('Duplicate Entry', $e->errorInfo[2])->persistent(true,false);
+            }else{
+                Alert::error('Oops', $e->errorInfo[2])->persistent(true,false);
             }
-       
-               
-            return back();
+                 
         }
+      
+               
+          return back();
+    }
+
+    /** Update Tutor to db */
+    public function updateTutor(Request $request)
+    {
+
+        $tutorId = $request->tutorId;
+        $firstname = $request->firstName;
+        $surname = $request->surname;
+        $email = $request->email;
+        $phone = $request->phone;
+        $courseCode = $request->courseCode;
+
+       
+        try{
+            
+            DB::update('UPDATE tutors SET firstname = ?, surname = ?, email = ?, phone = ?, courseCode = ? where tutorId = ?', [$firstname, $surname, $email, $phone, $courseCode, $tutorId]);
+
+            Alert::success('Success', 'Update was successful.');
+
+
+        } catch(\Illuminate\Database\QueryException $e){
+
+            $errorCode = $e->errorInfo[1];
+
+            Alert::error('Oops', $e->errorInfo[2])->persistent(true,false);
+            
+        }
+
+        return back();
+        
+    }
 
     /** Fetch Tutors records from DB */
     public function approve($tutorId)
