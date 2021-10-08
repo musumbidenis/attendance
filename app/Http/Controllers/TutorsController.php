@@ -90,7 +90,7 @@ class TutorsController extends Controller
           return back();
     }
 
-    /** Update Tutor to db */
+    /** Update Tutor details */
     public function updateTutor(Request $request)
     {
 

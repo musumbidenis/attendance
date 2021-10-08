@@ -28,6 +28,18 @@ class AcademicsController extends Controller
         
     }
 
+    /**Ajax request for units */
+    public function getUnits()
+    {
+        $courseCode = $_GET['courseCode'];
+
+        $units = Unit::where('courseCode', $courseCode)->get();
+
+        return response()->json($units);
+        
+    }
+
+
     /** Add new Course to db */
     public function newCourse(Request $request)
     {
@@ -54,11 +66,11 @@ class AcademicsController extends Controller
         return back();
     }
 
-    /** Add new Course to db */
+    /** Add new Unit to db */
     public function newUnit(Request $request)
     {
         $unit = new Unit();
-        $unit->unitCode = $request->courseCode;
+        $unit->unitCode = $request->unitCode;
         $unit->description = $request->description;
         $unit->studyPeriod = $request->studyPeriod;
         $unit->courseCode = $request->courseCode;
@@ -82,8 +94,35 @@ class AcademicsController extends Controller
         return back();
     }
 
-    /** Update Course to db */
+    /** Update Course details */
     public function updateCourse(Request $request)
+    {
+
+        $courseCode = $request->courseCode;
+        $description = $request->description;
+
+       
+        try{
+            
+            DB::update('UPDATE courses SET description = ? where courseCode = ?', [$description, $courseCode]);
+
+            Alert::success('Success', 'Update was successful.');
+
+
+        } catch(\Illuminate\Database\QueryException $e){
+
+            $errorCode = $e->errorInfo[1];
+
+            Alert::error('Oops', $e->errorInfo[2])->persistent(true,false);
+            
+        }
+
+        return back();
+        
+    }
+
+    /** Assign tutor units */
+    public function assignUnits(Request $request)
     {
 
         $courseCode = $request->courseCode;

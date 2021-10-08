@@ -25,6 +25,8 @@ Route::middleware(['isLoggedIn'])->group(function () {
     
 });
 
+Route::get('getUnits/{courseCode}', 'AcademicsController@getUnits');
+
 
 Route::post('students/import', 'StudentsController@import');
 Route::post('tutors/import', 'TutorsController@import');

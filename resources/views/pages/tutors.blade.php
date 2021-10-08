@@ -46,6 +46,7 @@
                                             <th>First Name</th>
                                             <th>Surname</th>
                                             <th>Email</th>
+                                            <th>Phone</th>
                                             <th>Course</th>
                                             <th class="disabled-sorting text-right">Actions</th>
                                           </tr>
@@ -56,6 +57,7 @@
                                             <th>First Name</th>
                                             <th>Surname</th>
                                             <th>Email</th>
+                                            <th>Phone</th>
                                             <th>Course</th>
                                             <th class="text-right">Actions</th>
                                           </tr>
@@ -67,6 +69,7 @@
                                               <td>{{$tutor->firstname}}</td>
                                               <td>{{$tutor->surname}}</td>
                                               <td>{{$tutor->email}}</td>
+                                              <td>{{$tutor->phone}}</td>
                                               <td>{{$tutor->courseCode}}</td>
                                               <td class="text-right">
                                                 <div class="float-right">
@@ -83,12 +86,80 @@
                                                     <i class="material-icons">edit</i>
                                                   </button>
                                                 </div>
+                                                <div class="float-right">
+                                                  <button id="assignButton" class="btn btn-info btn-link" rel="tooltip" data-placement="bottom" title="Assign units">
+                                                    <i class="material-icons">assignment</i>
+                                                  </button>
+                                                </div>
                                               </td>
                                             </tr>
                                           @endforeach
                                         </tbody>
                                       </table>
                                     </div>
+
+                                    <!-- Assign modal start -->
+                                    <form id="assignTutor" method="post" class="horizontal" action="{{ url('/tutors/update') }}">
+                                      {{ csrf_field() }}
+                                      
+                                      <div id="assignModal" class="modal" tabindex="-1" role="dialog">
+                                        <div class="modal-dialog" role="document">
+                                          <div class="modal-content">
+                                            <div class="modal-header">
+                                              <h5 class="modal-title">Assign Units</h5>
+                                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                              </button>
+                                            </div>
+                                            <div class="modal-body">
+                                              <div class="card-body ">
+                                                <div class="row">
+                                                  <label class="col-md-3 col-form-label"> Tutor Id *</label>
+                                                  <div class="col-md-9">
+                                                    <div class="form-group has-default">
+                                                      <input type="text" class="form-control" id="tutorIdAssign" name="tutorId" required="true" hidden>
+                                                      <input type="text" class="form-control" id="tutorIdAssign2" required="true" disabled>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div class="row">
+                                                  <label class="col-md-3 col-form-label"> First Name *</label>
+                                                  <div class="col-md-9">
+                                                    <div class="form-group has-default">
+                                                      <input type="text" class="form-control" id="firstNameAssign" name="firstName" required="true" disabled>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div class="row">
+                                                  <label class="col-md-3 col-form-label"> Surname *</label>
+                                                  <div class="col-md-9">
+                                                    <div class="form-group has-default">
+                                                      <input type="text" class="form-control" id="surnameAssign" name="surname" required="true" disabled>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div class="row">
+                                                  <label class="col-md-3 col-form-label"> Units *</label>
+                                                  <div class="col-md-9">
+                                                    <div class="form-group">
+                                                      <select id="selectUnits" class="selectpicker" name="unitCode" multiple data-style="select-with-transition" title="Select one or more units" required="true">
+                                                        <option selected>Select Units</option>
+                                                      </select>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div class="category form-category">* Required fields</div>
+                                              </div>;
+                                            </div>
+                                            <div class="modal-footer">
+                                              <button type="submit" id="saveChanges" class="btn btn-primary">Save changes</button>
+                                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </form>
+                                    <!-- Assign modal end -->
 
                                     <!-- Edit modal start -->
                                     <form id="editTutor" method="post" class="horizontal" action="{{ url('/tutors/update') }}">
@@ -135,6 +206,14 @@
                                                   <div class="col-md-9">
                                                     <div class="form-group has-default">
                                                       <input type="text" class="form-control" id="email" name="email" required="true">
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div class="row">
+                                                  <label class="col-md-3 col-form-label"> Phone *</label>
+                                                  <div class="col-md-9">
+                                                    <div class="form-group has-default">
+                                                      <input type="number" class="form-control" id="phone" name="phone" required="true">
                                                     </div>
                                                   </div>
                                                 </div>
@@ -278,10 +357,12 @@
         setFormValidation('#importTutors');
         setFormValidation('#addTutor');
         setFormValidation('#editTutor');
+        setFormValidation('#assignTutor');
       });
     </script>
     <script>
       $(document).ready(function() {
+        /** Datatables */
         $('#datatables').DataTable({
           "pagingType": "full_numbers",
           "lengthMenu": [
@@ -298,23 +379,75 @@
 
         var table = $('#datatables').DataTable();
 
-        // Edit record
-        table.on('click', '#editButton', function() {
+        /** Assigning Units */
+        table.on('click', '#assignButton', function() {
 
-          $('#editModal').modal('show');
+          $('#assignModal').modal('show'); //Show modal
 
+          //Get the tutor details from table row
           $tr = $(this).closest('tr');
           var data = $tr.children("td").map(function(){
             return $(this).text();
           }).get();
           
-          $('#tutorId').val(data[0]);
-          $('#tutorId2').val(data[0]);
-          $('#courseCode2').val(data[0]);
+          //Assign values to modal form
+          $('#tutorIdAssign').val(data[0]); //hidden input
+          $('#tutorIdAssign2').val(data[0]); //Disabled input
+          $('#firstNameAssign').val(data[1]);
+          $('#surnameAssign').val(data[2]);
+          
+
+          //CORS
+          $.ajaxSetup({
+            headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+          });
+          
+          //Ajax request for getting units
+          $.ajax({
+              url: "{{ url('/getUnits/{courseCode}') }}",
+              type: 'get',
+              data: {courseCode: data[5]},
+              dataType: 'json',
+              success:function(response){
+
+                  var len = response.length;
+
+                  $("#selectUnits").empty(); //Empty the select box
+
+                  for( var i = 0; i<len; i++){
+                    var unitCode = response[i]['unitCode'];
+                    var description = response[i]['description'];
+                      
+                    $("#selectUnits").append(new Option(description, unitCode)); //Append select box with fetched units data
+
+                    $('#selectUnits').selectpicker('refresh'); //Refresh bootstrap-selectpicker
+                  }
+              }
+          });
+
+        });
+
+        /** Editing record */
+        table.on('click', '#editButton', function() {
+
+          $('#editModal').modal('show'); //Show modal
+
+          //Get the tutor details from table row
+          $tr = $(this).closest('tr');
+          var data = $tr.children("td").map(function(){
+            return $(this).text();
+          }).get();
+          
+          //Assign values to modal form
+          $('#tutorId').val(data[0]); //Hidden input
+          $('#tutorId2').val(data[0]); //Disabled input
           $('#firstName').val(data[1]);
           $('#surname').val(data[2]);
           $('#email').val(data[3]);
-          $('#courseCode').val(data[4]);
+          $('#phone').val(data[4]);
+          $('#courseCode').val(data[5]);
 
         });
       });
