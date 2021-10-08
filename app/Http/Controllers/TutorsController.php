@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use DB;
+use File;
 use Mail;
 use App\Unit;
 use App\Tutor;
@@ -35,12 +36,20 @@ class TutorsController extends Controller
     /** Add New Tutor Record from Form */
     public function newTutor(Request $request)
     {
+
+        /** Get input details */
+        $phoneNumber = $request->phone;
+
+        /** Format the phone input */
+        $phoneNumber = (substr($phoneNumber, 0, 2) == '07') ? preg_replace('/^0/','+254', $phoneNumber) : $phoneNumber;
+        $phoneNumber = (substr($phoneNumber, 0, 3) == '254') ? str_replace('254','+254', $phoneNumber) : $phoneNumber;
+
         $tutor = new Tutor();
         $tutor->tutorId = $request->tutorId;
         $tutor->firstname = $request->firstName;
         $tutor->surname = $request->surname;
         $tutor->email = $request->email;
-        $tutor->phone = $request->phone;
+        $tutor->phone = $phoneNumber;
         $tutor->courseCode = $request->courseCode;
 
         try{

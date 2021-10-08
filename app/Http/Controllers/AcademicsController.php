@@ -75,7 +75,7 @@ class AcademicsController extends Controller
     /** Add new Unit to db */
     public function newUnit(Request $request)
     {
-        
+
         /** Get input details */
         $unit = new Unit();
         $unit->unitCode = $request->unitCode;
@@ -144,7 +144,7 @@ class AcademicsController extends Controller
             
                 DB::update('UPDATE units SET tutorId = ? where unitCode = ?', [$tutorId, $unit]);
     
-                Alert::success('Success', 'Update was successful.');
+                Alert::success('Success', 'Tutor assigned units successfully.');
     
     
             } catch(\Illuminate\Database\QueryException $e){
