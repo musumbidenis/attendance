@@ -29,14 +29,18 @@ Route::get('getUnits/{courseCode}', 'AcademicsController@getUnits');
 
 
 Route::post('students/import', 'StudentsController@import');
-Route::post('tutors/import', 'TutorsController@import');
 Route::post('students/new', 'StudentsController@newStudent');
+
+Route::post('approve/{tutorId}', 'TutorsController@approve');
+Route::post('tutors/import', 'TutorsController@import');
 Route::post('tutors/new', 'TutorsController@newTutor');
 Route::post('tutors/update', 'TutorsController@updateTutor');
+
 Route::post('courses/new', 'AcademicsController@newCourse');
 Route::post('courses/update', 'AcademicsController@updateCourse');
+
 Route::post('units/new', 'AcademicsController@newUnit');
-Route::post('approve/{tutorId}', 'TutorsController@approve');
+Route::post('assign', 'AcademicsController@assignUnits');
 
 
 /* Authentication Routes */

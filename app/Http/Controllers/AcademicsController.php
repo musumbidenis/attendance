@@ -13,6 +13,7 @@ class AcademicsController extends Controller
     /** Courses && Units Pages */
     public function coursesPage()
     {
+
         $courses = DB::select('select * from courses');
 
         return view('pages.courses',['courses'=>$courses]);
@@ -21,6 +22,7 @@ class AcademicsController extends Controller
 
     public function unitsPage()
     {
+        
         $units = DB::select('select * from units');
         $courses = DB::select('select * from courses');
 
@@ -31,6 +33,8 @@ class AcademicsController extends Controller
     /**Ajax request for units */
     public function getUnits()
     {
+
+        /** Get input details */
         $courseCode = $_GET['courseCode'];
 
         $units = Unit::where('courseCode', $courseCode)->get();
@@ -43,6 +47,8 @@ class AcademicsController extends Controller
     /** Add new Course to db */
     public function newCourse(Request $request)
     {
+
+        /** Get input details */
         $course = new Course();
         $course->courseCode = $request->courseCode;
         $course->description = $request->description;
@@ -69,6 +75,8 @@ class AcademicsController extends Controller
     /** Add new Unit to db */
     public function newUnit(Request $request)
     {
+        
+        /** Get input details */
         $unit = new Unit();
         $unit->unitCode = $request->unitCode;
         $unit->description = $request->description;
@@ -98,6 +106,7 @@ class AcademicsController extends Controller
     public function updateCourse(Request $request)
     {
 
+        /** Get input details */
         $courseCode = $request->courseCode;
         $description = $request->description;
 
@@ -125,23 +134,26 @@ class AcademicsController extends Controller
     public function assignUnits(Request $request)
     {
 
-        $courseCode = $request->courseCode;
-        $description = $request->description;
+        /** Get input details */
+        $tutorId = $request->tutorId;
+        $unitCode = $request->unitCode;
 
-       
-        try{
+        /** Assign units selected to tutor */
+        foreach ($unitCode as $unit) {
+            try{
             
-            DB::update('UPDATE courses SET description = ? where courseCode = ?', [$description, $courseCode]);
-
-            Alert::success('Success', 'Update was successful.');
-
-
-        } catch(\Illuminate\Database\QueryException $e){
-
-            $errorCode = $e->errorInfo[1];
-
-            Alert::error('Oops', $e->errorInfo[2])->persistent(true,false);
-            
+                DB::update('UPDATE units SET tutorId = ? where unitCode = ?', [$tutorId, $unit]);
+    
+                Alert::success('Success', 'Update was successful.');
+    
+    
+            } catch(\Illuminate\Database\QueryException $e){
+    
+                $errorCode = $e->errorInfo[1];
+    
+                Alert::error('Oops', $e->errorInfo[2])->persistent(true,false);
+                
+            }
         }
 
         return back();

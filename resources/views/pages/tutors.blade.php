@@ -99,7 +99,7 @@
                                     </div>
 
                                     <!-- Assign modal start -->
-                                    <form id="assignTutor" method="post" class="horizontal" action="{{ url('/tutors/update') }}">
+                                    <form id="assignTutor" method="post" class="horizontal" action="{{ url('assign') }}">
                                       {{ csrf_field() }}
                                       
                                       <div id="assignModal" class="modal" tabindex="-1" role="dialog">
@@ -142,7 +142,7 @@
                                                   <label class="col-md-3 col-form-label"> Units *</label>
                                                   <div class="col-md-9">
                                                     <div class="form-group">
-                                                      <select id="selectUnits" class="selectpicker" name="unitCode" multiple data-style="select-with-transition" title="Select one or more units" required="true">
+                                                      <select id="selectUnits" class="selectpicker" name="unitCode[]" multiple data-style="select-with-transition" title="Select one or more units" required="true">
                                                         <option selected>Select Units</option>
                                                       </select>
                                                     </div>
