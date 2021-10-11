@@ -6,6 +6,8 @@ use DB;
 use App\Unit;
 use App\Tutor;
 Use App\Lesson;
+use App\Student;
+use App\UnitRegistration;
 use Illuminate\Http\Request;
 
 class USSDController extends Controller
@@ -165,6 +167,95 @@ class USSDController extends Controller
         if ($level == 1) {
 
             echo "CON Enter your admission number in the format, e.g ci/xxxxx/20xx";
+
+        }elseif ($level == 2) {
+
+            //Verify the Student ID
+            $studentId = $ussd_string_exploded[1];
+            $credentials = Student::where('studentId', $studentId)->count();
+
+            //Student record does not exist
+            if ($credentials == 0) {
+
+                echo "END Student ID record does not exist. Contact the system admin for assistance.";
+
+            //Student record exists
+            }else{
+
+                //Verify Phone Number against Student ID
+                $verification = Student::where('studentId', $studentId)->where('phone', $phoneNumber)->count();
+
+                //Not true
+                if ($verification == 0) {
+
+                    echo "END Phone Number is not registered to $studentId. Contact the system admin for assistance.";
+
+                }else{
+
+                    //Check if student has registered for units
+                    $check = DB::table('unitRegistrations')
+                            ->join('units', 'units.unitCode', '=', 'unitRegistrations.unitCode')
+                            ->join('students', 'students.studyPeriod', '=', 'units.studyPeriod')
+                            ->where('students.studentId', '=', $studentId)
+                            ->count();
+                    
+                    //Not registered
+                    if($check == 0 ){
+
+                        //Notify user and present unit registration menu 
+                        echo "END You've not registered for units. Please do so to continue.";
+
+                    }else{
+
+                        //Use the Student ID and get units with lessons for that day
+                        $units = DB::table('lessons')
+                                ->join('units', 'units.unitCode', '=', 'lessons.unitCode')
+                                ->join('students', 'students.courseCode', '=', 'units.courseCode')
+                                ->where('students.studentId', '=', $studentId)
+                                ->whereRaw('Date(lessons.lessonStart) = CURDATE()')
+                                ->get();
+
+                        $i = 1;
+
+                        $response  = "CON Select unit to sign attendance:\n";
+                        foreach ($units as $unit) {
+                            $response .= "$i. $unit->unitCode \n";
+                            $i++;
+                        }
+
+                        echo $response;
+                    }
+
+                }
+            }
+        
+        }elseif($level == 3){
+
+            $studentId = $ussd_string_exploded[1];
+
+            //Use the Student ID and get units with lessons for that day
+            $units = DB::table('lessons')
+                    ->join('units', 'units.unitCode', '=', 'lessons.unitCode')
+                    ->join('students', 'students.courseCode', '=', 'units.courseCode')
+                    ->where('students.studentId', '=', $studentId)
+                    ->whereRaw('Date(lessons.lessonStart) = CURDATE()')
+                    ->get();
+            
+            //Check if lesson has ended or active
+            $lessonStop = $units[$ussd_string_exploded[2]-1]->lessonStop;
+            $now = now();
+
+            if($now > $lessonStop){//Deny signing attendance
+
+                echo "END You can't sign attendance. Lesson ended at $now $lessonStop";
+
+            //Sign attendance
+            }else{
+
+                echo "END Lesson ended. $now $lessonStop";
+
+            }
+            
 
         }
     }

@@ -143,7 +143,7 @@
                                                   <div class="col-md-9">
                                                     <div class="form-group">
                                                       <select id="selectUnits" class="selectpicker" name="unitCode[]" multiple data-style="select-with-transition" title="Select one or more units" required="true">
-                                                        <option selected>Select Units</option>
+                                                        <option selected disabled>Select Units</option>
                                                       </select>
                                                     </div>
                                                   </div>
