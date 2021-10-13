@@ -7,6 +7,7 @@ use App\Unit;
 use App\Tutor;
 Use App\Lesson;
 use App\Student;
+use App\Attendance;
 use App\UnitRegistration;
 use Illuminate\Http\Request;
 
@@ -117,13 +118,24 @@ class USSDController extends Controller
             $units = Unit::where('tutorId', $tutorId)->get();
             $unitCode = $units[$ussd_string_exploded[2]-1]->unitCode;
             $lessonStart = $ussd_string_exploded[3];
-            
-            //Confirmation menu
-            $response = "CON You're setting $unitCode lesson to start at $lessonStart. \n";
-            $response .= "1. Confirm \n";
-            $response .= "2. Cancel";
 
-            echo $response;
+            if( strtotime($lessonStart) < strtotime(now()) ){//Trying to schedule a lesson "before" current time
+                
+                echo "END Specified time has elapsed. Unable to schedule a lesson at that time.";
+
+            }else{//Confirmation menu
+
+                $formatedDate = date_format(date_create($lessonStart), 'g:i A');
+
+                $response = "CON You're scheduling $unitCode to start at $formatedDate. \n";
+                $response .= "1. Save \n";
+                $response .= "2. Cancel";
+
+                echo $response;
+
+            }
+            
+            
 
         }elseif($level == 5) {
 
@@ -203,7 +215,7 @@ class USSDController extends Controller
                     //Not registered
                     if($check == 0 ){
 
-                        //Notify user and present unit registration menu 
+                        //Notify user and display unit registration menu 
                         echo "END You've not registered for units. Please do so to continue.";
 
                     }else{
@@ -217,21 +229,31 @@ class USSDController extends Controller
                                 ->orderBy('lessons.lessonStart', 'asc')
                                 ->get();
 
-                        $i = 1;
-                        $response  = "CON Select unit to sign attendance:\n";
+                        if ( count($lessons) > 0 ) {//There are lessons that day
 
-                        foreach ($lessons as $lesson) {
+                            $i = 1;
+                            $response  = "CON Select unit to sign attendance:\n";
 
-                            //Format dates in AM, PM
-                            $lessonStart = date_format(date_create($lesson->lessonStart), 'g:i A');
-                            $lessonStop = date_format(date_create($lesson->lessonStop), 'g:i A');
+                            foreach ($lessons as $lesson) {
 
-                            $response .= "$i. $lesson->unitCode - ($lessonStart to $lessonStop)\n";
-                            $i++;
+                                //Format dates in AM, PM
+                                $lessonStart = date_format(date_create($lesson->lessonStart), 'g:i A');
+                                $lessonStop = date_format(date_create($lesson->lessonStop), 'g:i A');
+
+                                $response .= "$i. $lesson->unitCode - ($lessonStart to $lessonStop)\n";
+                                $i++;
+
+                            }
+
+                            echo $response;
+
+                        }else{//No lessons have been created for that day
+
+                            echo "END There are no active lessons today.\n";
 
                         }
 
-                        echo $response;
+                        
                     }
 
                 }
@@ -249,10 +271,9 @@ class USSDController extends Controller
                     ->orderBy('lessons.lessonStart', 'asc')
                     ->get();
             
-            //Check if lesson has ended or active
             $lessonStop = $units[$ussd_string_exploded[2]-1]->lessonStop;
 
-            if(now() > $lessonStop){//Deny signing attendance
+            if(now() > $lessonStop){//Lesson is not active
 
                 $formatedDate = date_format(date_create($lessonStop), 'g:i A');
 
@@ -260,7 +281,13 @@ class USSDController extends Controller
 
             }else{//Sign attendance
 
-                echo "END Tuendelee.";
+                $attendance = new Attendance();
+                $attendance->studentId = $studentId;
+                $attendance->lessonId = $units[$ussd_string_exploded[2]-1]->lessonId;
+
+                $attendance->save();
+
+                echo "END Attendance signed successfully.";
 
             }
             
