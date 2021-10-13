@@ -21,6 +21,6 @@ class isLoggedIn
         }
 
         Alert::error('Oops', 'You must be logged in to access this resource.')->persistent(true,false);
-        return redirect('login');
+        return redirect('admin');
     }
 }

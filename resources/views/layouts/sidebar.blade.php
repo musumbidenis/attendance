@@ -11,12 +11,12 @@
               <!-- User profile details -->
               <div class="user">
                 <div class="photo">
-                  <img src="../assets/img/faces/avatar.jpg" />
+                  <img src="../assets/img/avatar.jpg" />
                 </div>
                 <div class="user-info">
                   <a data-toggle="collapse" href="#profile" class="username">
                     <span>
-                      Tania Andrew
+                      {{ session()->get('userName') }}
                       <b class="caret"></b>
                     </span>
                   </a>

@@ -163,6 +163,7 @@ class AuthController extends Controller
                 }else {
  
                     $request->session()->put('userDetails',$adminDetails);
+                    $request->session()->put('userName',$adminDetails->firstname . ' ' . $adminDetails->surname);
                     return redirect('dashboard');
 
                 }
@@ -213,7 +214,7 @@ class AuthController extends Controller
     {
         
         $request->session()->flush();
-        return redirect('login');
+        return redirect('admin');
 
     }
 

@@ -48,7 +48,7 @@
                                             <th>Email</th>
                                             <th>Phone</th>
                                             <th>Course</th>
-                                            <th class="disabled-sorting text-right">Actions</th>
+                                            <th class="disabled-sorting text-right not-export-col">Actions</th>
                                           </tr>
                                         </thead>
                                         <tfoot>
@@ -59,7 +59,7 @@
                                             <th>Email</th>
                                             <th>Phone</th>
                                             <th>Course</th>
-                                            <th class="text-right">Actions</th>
+                                            <th class="text-right not-export-col">Actions</th>
                                           </tr>
                                         </tfoot>
                                         <tbody>
@@ -364,6 +364,43 @@
       $(document).ready(function() {
         /** Datatables */
         $('#datatables').DataTable({
+          dom: "<'row'<'col-md-6'B><'col-md-6'f>>" + "rt" + "<'row'<'col-md-6'i><'col-md-6'p>>",
+          buttons: [
+            {
+              text: 'csv',
+              extend: 'csvHtml5',
+              className: 'btn-primary',
+              exportOptions: {
+                columns: ':visible:not(.not-export-col)'
+              }
+            },
+            {
+              text: 'excel',
+              extend: 'excelHtml5',
+              exportOptions: {
+                columns: ':visible:not(.not-export-col)'
+              }
+            },
+            {
+              text: 'pdf',
+              extend: 'pdfHtml5',
+              className: "btn-primary",
+              exportOptions: {
+                columns: ':visible:not(.not-export-col)'
+              },
+              buttons:
+                [{
+                extend: "pdfHtml5", className: "btn-primary"
+              }],
+            },
+            {
+              text: 'print',
+              extend: 'print',
+              exportOptions: {
+                columns: ':visible:not(.not-export-col)'
+              }
+            },
+          ],
           "pagingType": "full_numbers",
           "lengthMenu": [
             [10, 25, 50, -1],

@@ -109,7 +109,7 @@ class USSDController extends Controller
             $units = Unit::where('tutorId', $tutorId)->get();
             $unitCode = $units[$ussd_string_exploded[2]-1]->unitCode;
 
-            echo "CON Set the starting time for $unitCode in the following formart, e.g 08:00";
+            echo "CON Set the starting time for $unitCode in 24-hour format: e.g 08:00, 14:00";
 
         }elseif($level == 4){
 
@@ -117,7 +117,8 @@ class USSDController extends Controller
             $units = Unit::where('tutorId', $tutorId)->get();
             $unitCode = $units[$ussd_string_exploded[2]-1]->unitCode;
             $lessonStart = $ussd_string_exploded[3];
-
+            
+            //Confirmation menu
             $response = "CON You're setting $unitCode lesson to start at $lessonStart. \n";
             $response .= "1. Confirm \n";
             $response .= "2. Cancel";
@@ -128,12 +129,11 @@ class USSDController extends Controller
 
             if($ussd_string_exploded[4] == '1'){
                 
-                //User chose saving lesson data
+                //Get details
                 $date = date('Y-m-d');
-                $time = $ussd_string_exploded[3];
-                $lessonStart = $date.' '. $time;
-                $lessonStop = date('Y-m-d H:i', strtotime('+2 hours', strtotime($lessonStart)));
-                $stop = now();
+                $time = $ussd_string_exploded[3];//Start lesson time
+                $lessonStart = $date.' '. $time;//Concatenate today's date and start time for lesson
+                $lessonStop = date('Y-m-d H:i', strtotime('+2 hours', strtotime($lessonStart)));//2 hours per lesson rule;
                 
                 //Get the selected Unit Code using Tutors ID and response
                 $tutorId = $ussd_string_exploded[1];
@@ -161,12 +161,13 @@ class USSDController extends Controller
 
     /** Student USSD Menu */
     Public function studentMenu($ussd_string_exploded, $phoneNumber){
+
         // Get ussd menu level number from the gateway
         $level = count($ussd_string_exploded);
 
         if ($level == 1) {
 
-            echo "CON Enter your admission number in the format, e.g ci/xxxxx/20xx";
+            echo "CON Enter your admission number in the format, e.g ci/xxxxx/xx";
 
         }elseif ($level == 2) {
 
@@ -208,19 +209,26 @@ class USSDController extends Controller
                     }else{
 
                         //Use the Student ID and get units with lessons for that day
-                        $units = DB::table('lessons')
+                        $lessons = DB::table('lessons')
                                 ->join('units', 'units.unitCode', '=', 'lessons.unitCode')
                                 ->join('students', 'students.courseCode', '=', 'units.courseCode')
                                 ->where('students.studentId', '=', $studentId)
                                 ->whereRaw('Date(lessons.lessonStart) = CURDATE()')
+                                ->orderBy('lessons.lessonStart', 'asc')
                                 ->get();
 
                         $i = 1;
-
                         $response  = "CON Select unit to sign attendance:\n";
-                        foreach ($units as $unit) {
-                            $response .= "$i. $unit->unitCode \n";
+
+                        foreach ($lessons as $lesson) {
+
+                            //Format dates in AM, PM
+                            $lessonStart = date_format(date_create($lesson->lessonStart), 'g:i A');
+                            $lessonStop = date_format(date_create($lesson->lessonStop), 'g:i A');
+
+                            $response .= "$i. $lesson->unitCode - ($lessonStart to $lessonStop)\n";
                             $i++;
+
                         }
 
                         echo $response;
@@ -231,28 +239,28 @@ class USSDController extends Controller
         
         }elseif($level == 3){
 
-            $studentId = $ussd_string_exploded[1];
-
             //Use the Student ID and get units with lessons for that day
+            $studentId = $ussd_string_exploded[1];
             $units = DB::table('lessons')
                     ->join('units', 'units.unitCode', '=', 'lessons.unitCode')
                     ->join('students', 'students.courseCode', '=', 'units.courseCode')
                     ->where('students.studentId', '=', $studentId)
                     ->whereRaw('Date(lessons.lessonStart) = CURDATE()')
+                    ->orderBy('lessons.lessonStart', 'asc')
                     ->get();
             
             //Check if lesson has ended or active
             $lessonStop = $units[$ussd_string_exploded[2]-1]->lessonStop;
-            $now = now();
 
-            if($now > $lessonStop){//Deny signing attendance
+            if(now() > $lessonStop){//Deny signing attendance
 
-                echo "END You can't sign attendance. Lesson ended at $now $lessonStop";
+                $formatedDate = date_format(date_create($lessonStop), 'g:i A');
 
-            //Sign attendance
-            }else{
+                echo "END You can't sign attendance. Lesson ended at $formatedDate. ";
 
-                echo "END Lesson ended. $now $lessonStop";
+            }else{//Sign attendance
+
+                echo "END Tuendelee.";
 
             }
             
