@@ -23,7 +23,7 @@
                   <div class="collapse" id="profile">
                     <ul class="nav">
                       <li class="nav-item">
-                        <a class="nav-link" href="/profile">
+                        <a class="nav-link" href="#">
                           <span class="sidebar-mini"> MP </span>
                           <span class="sidebar-normal"> My Profile </span>
                         </a>
@@ -98,32 +98,6 @@
                     </ul>
                   </div>
                 </li>
-
-                <li class="nav-item {{ Request::path() == 'attendances/tutors' || Request::path() == 'attendances/students' ? 'active' : '' }}">
-                  <a class="nav-link" data-toggle="collapse" href="#attendances">
-                    <i class="material-icons">list_alt</i>
-                    <p> Attendances
-                      <b class="caret"></b>
-                    </p>
-                  </a>
-                  <div class="collapse {{ Request::path() == 'attendances/tutors' || Request::path() == 'attendances/students' ? 'show' : '' }}" id="attendances">
-                    <ul class="nav">
-                      <li class="nav-item {{ Request::path() == 'attendances/tutors' ? 'active' : '' }} ">
-                        <a class="nav-link" href="/attendances/tutors">
-                          <span class="sidebar-mini"> TA </span>
-                          <span class="sidebar-normal"> Tutors Attendance </span>
-                        </a>
-                      </li>
-                      <li class="nav-item {{ Request::path() == 'attendances/students' ? 'active' : '' }} ">
-                        <a class="nav-link" href="/attendances/students">
-                          <span class="sidebar-mini"> SA </span>
-                          <span class="sidebar-normal"> Students Attendance </span>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </li>
-
               </ul>
             </div>
           </div>

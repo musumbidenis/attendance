@@ -272,14 +272,21 @@ class USSDController extends Controller
                     ->get();
             
             $lessonStop = $units[$ussd_string_exploded[2]-1]->lessonStop;
+            $lessonStart = $units[$ussd_string_exploded[2]-1]->lessonStart;
 
-            if(now() > $lessonStop){//Lesson is not active
+            if(now() > $lessonStop){//Lesson ended
 
                 $formatedDate = date_format(date_create($lessonStop), 'g:i A');
 
                 echo "END You can't sign attendance. Lesson ended at $formatedDate. ";
 
-            }else{//Sign attendance
+            }else if(now() < $lessonStart){//lesson has not started
+
+                $formatedDate = date_format(date_create($lessonStart), 'g:i A');
+
+                echo "END You can't sign attendance. Lesson starts at $formatedDate. ";
+
+            }else{//Lesson active ==> Sign attendance
 
                 $attendance = new Attendance();
                 $attendance->studentId = $studentId;
