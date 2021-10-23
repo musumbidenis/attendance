@@ -62,12 +62,32 @@ class USSDController extends Controller
 
         if ($level == 1) {
 
-           echo "CON Enter your Tutor ID:";
+            $response  = "CON Reply with: \n";
+            $response .= "1. Create Lesson \n";
+            $response .= "2. Class Attendance Record";
+
+            echo $response;
 
         }elseif ($level == 2) {
 
+            if ($ussd_string_exploded[1] == '1') {
+                
+                echo "CON Enter your Tutor ID:";
+
+            }elseif ($ussd_string_exploded[1] == '2'){
+
+                echo "END Menu construction in progress";
+
+            }else{
+
+                echo "END Invalid choice. Please try again.";
+
+            }
+
+        }elseif($level == 3){
+
             //Verify the Tutor ID
-            $tutorId = $ussd_string_exploded[1];
+            $tutorId = $ussd_string_exploded[2];
             $credentials = Tutor::where('tutorId', $tutorId)->count();
 
             //Tutor record does not exist
@@ -103,21 +123,21 @@ class USSDController extends Controller
                 }
             }
         
-        }elseif ($level == 3) {
+        }elseif ($level == 4) {
 
             //Get the Unit Code selected
-            $tutorId = $ussd_string_exploded[1];
+            $tutorId = $ussd_string_exploded[2];
             $units = Unit::where('tutorId', $tutorId)->get();
-            $unitCode = $units[$ussd_string_exploded[2]-1]->unitCode;
+            $unitCode = $units[$ussd_string_exploded[3]-1]->unitCode;
 
             echo "CON Set the starting time for $unitCode in 24-hour format: e.g 08:00, 14:00";
 
-        }elseif($level == 4){
+        }elseif($level == 5){
 
-            $tutorId = $ussd_string_exploded[1];
+            $tutorId = $ussd_string_exploded[2];
             $units = Unit::where('tutorId', $tutorId)->get();
-            $unitCode = $units[$ussd_string_exploded[2]-1]->unitCode;
-            $lessonStart = $ussd_string_exploded[3];
+            $unitCode = $units[$ussd_string_exploded[3]-1]->unitCode;
+            $lessonStart = $ussd_string_exploded[4];
 
             if( strtotime($lessonStart) < strtotime(now()) ){//Trying to schedule a lesson "before" current time
                 
@@ -137,20 +157,20 @@ class USSDController extends Controller
             
             
 
-        }elseif($level == 5) {
+        }elseif($level == 6) {
 
-            if($ussd_string_exploded[4] == '1'){
+            if($ussd_string_exploded[5] == '1'){
                 
                 //Get details
                 $date = date('Y-m-d');
-                $time = $ussd_string_exploded[3];//Start lesson time
+                $time = $ussd_string_exploded[4];//Start lesson time
                 $lessonStart = $date.' '. $time;//Concatenate today's date and start time for lesson
                 $lessonStop = date('Y-m-d H:i', strtotime('+2 hours', strtotime($lessonStart)));//2 hours per lesson rule;
                 
                 //Get the selected Unit Code using Tutors ID and response
-                $tutorId = $ussd_string_exploded[1];
+                $tutorId = $ussd_string_exploded[2];
                 $units = Unit::where('tutorId', $tutorId)->get();
-                $unitCode = $units[$ussd_string_exploded[2]-1]->unitCode;
+                $unitCode = $units[$ussd_string_exploded[3]-1]->unitCode;
 
                 //Store lesson record to DB
                 $lesson = new Lesson();
@@ -179,12 +199,32 @@ class USSDController extends Controller
 
         if ($level == 1) {
 
-            echo "CON Enter your admission number in the format, e.g ci/xxxxx/xx";
+            $response  = "CON Reply with: \n";
+            $response .= "1. Sign Attendance \n";
+            $response .= "2. Class Attendance Record";
+
+            echo $response;
 
         }elseif ($level == 2) {
 
+            if ($ussd_string_exploded[1] == '1') {
+                
+                echo "CON Enter your admission number in the format, e.g ci/xxxxx/xx";
+
+            }elseif ($ussd_string_exploded[1] == '2'){
+
+                echo "END Menu construction in progress";
+
+            }else{
+
+                echo "END Invalid choice. Please try again.";
+
+            }
+
+        }elseif($level == 3){
+
             //Verify the Student ID
-            $studentId = $ussd_string_exploded[1];
+            $studentId = $ussd_string_exploded[2];
             $credentials = Student::where('studentId', $studentId)->count();
 
             //Student record does not exist
@@ -257,12 +297,12 @@ class USSDController extends Controller
                     }
 
                 }
-            }
+            }        
         
-        }elseif($level == 3){
+        }elseif($level == 4){
 
             //Use the Student ID and get units with lessons for that day
-            $studentId = $ussd_string_exploded[1];
+            $studentId = $ussd_string_exploded[2];
             $units = DB::table('lessons')
                     ->join('units', 'units.unitCode', '=', 'lessons.unitCode')
                     ->join('students', 'students.courseCode', '=', 'units.courseCode')
@@ -271,8 +311,8 @@ class USSDController extends Controller
                     ->orderBy('lessons.lessonStart', 'asc')
                     ->get();
             
-            $lessonStop = $units[$ussd_string_exploded[2]-1]->lessonStop;
-            $lessonStart = $units[$ussd_string_exploded[2]-1]->lessonStart;
+            $lessonStop = $units[$ussd_string_exploded[3]-1]->lessonStop;
+            $lessonStart = $units[$ussd_string_exploded[3]-1]->lessonStart;
 
             if(now() > $lessonStop){//Lesson ended
 
@@ -290,7 +330,7 @@ class USSDController extends Controller
 
                 $attendance = new Attendance();
                 $attendance->studentId = $studentId;
-                $attendance->lessonId = $units[$ussd_string_exploded[2]-1]->lessonId;
+                $attendance->lessonId = $units[$ussd_string_exploded[3]-1]->lessonId;
 
                 $attendance->save();
 
@@ -298,7 +338,6 @@ class USSDController extends Controller
 
             }
             
-
         }
     }
 }
