@@ -1,0 +1,13 @@
+SELECT DISTINCT units.description,
+(SELECT COUNT(*) FROM lessons WHERE unitCode = "CIT 408") AS lessons,
+(SELECT COUNT(*) FROM attendances JOIN lessons ON lessons.lessonId = attendances.lessonId WHERE lessons.unitCode = "CIT 408") AS lessonsAttended,
+
+((SELECT COUNT(*) FROM attendances JOIN lessons ON lessons.lessonId = attendances.lessonId WHERE lessons.unitCode = "CIT 408")
+ /
+(SELECT COUNT(*) FROM lessons WHERE unitCode = "CIT 408")
+* 100) AS record
+FROM units
+JOIN students ON students.studyPeriod = units.studyPeriod
+JOIN attendances ON attendances.studentId = students.studentId
+JOIN lessons ON lessons.lessonId = attendances.lessonId
+WHERE students.studentId = "CI/00034/017" AND units.unitCode = "CIT 408"

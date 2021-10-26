@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use DB;
+use Mail;
 use App\Unit;
 use App\Tutor;
 Use App\Lesson;
@@ -207,13 +208,9 @@ class USSDController extends Controller
 
         }elseif ($level == 2) {
 
-            if ($ussd_string_exploded[1] == '1') {
+            if ($ussd_string_exploded[1] == '1' || $ussd_string_exploded[1] == '2') {
                 
                 echo "CON Enter your admission number in the format, e.g ci/xxxxx/xx";
-
-            }elseif ($ussd_string_exploded[1] == '2'){
-
-                echo "END Menu construction in progress";
 
             }else{
 
@@ -260,8 +257,10 @@ class USSDController extends Controller
 
                     }else{
 
-                        //Use the Student ID and get units with lessons for that day
-                        $lessons = DB::table('lessons')
+                        if ($ussd_string_exploded[1] == '1') {//User selected option one (Sign Attendance)
+                            
+                           //Use the Student ID and get units with lessons for that day
+                           $lessons = DB::table('lessons')
                                 ->join('units', 'units.unitCode', '=', 'lessons.unitCode')
                                 ->join('students', 'students.courseCode', '=', 'units.courseCode')
                                 ->where('students.studentId', '=', $studentId)
@@ -269,30 +268,86 @@ class USSDController extends Controller
                                 ->orderBy('lessons.lessonStart', 'asc')
                                 ->get();
 
-                        if ( count($lessons) > 0 ) {//There are lessons that day
+                            if ( count($lessons) > 0 ) {//There are lessons that day
 
-                            $i = 1;
-                            $response  = "CON Select unit to sign attendance:\n";
+                                $i = 1;
+                                $response  = "CON Select unit to sign attendance:\n";
 
-                            foreach ($lessons as $lesson) {
+                                foreach ($lessons as $lesson) {
 
-                                //Format dates in AM, PM
-                                $lessonStart = date_format(date_create($lesson->lessonStart), 'g:i A');
-                                $lessonStop = date_format(date_create($lesson->lessonStop), 'g:i A');
+                                    //Format dates in AM, PM
+                                    $lessonStart = date_format(date_create($lesson->lessonStart), 'g:i A');
+                                    $lessonStop = date_format(date_create($lesson->lessonStop), 'g:i A');
 
-                                $response .= "$i. $lesson->unitCode - ($lessonStart to $lessonStop)\n";
-                                $i++;
+                                    $response .= "$i. $lesson->unitCode - ($lessonStart to $lessonStop)\n";
+                                    $i++;
+
+                                }
+
+                                echo $response;
+
+                            }else{//No lessons have been created for that day
+
+                                echo "END There are no active lessons today.\n";
 
                             }
 
-                            echo $response;
+                        }else{//User selected option two (Class Attendance record)
 
-                        }else{//No lessons have been created for that day
+                            //Get all registered units for student
+                            $units = DB::table('unitRegistrations')
+                                ->select('unitRegistrations.unitCode')
+                                ->join('units', 'units.unitCode', '=', 'unitRegistrations.unitCode')
+                                ->join('students', 'students.studyPeriod', '=', 'units.studyPeriod')
+                                ->where('students.studentId', '=', $studentId)
+                                ->get();
 
-                            echo "END There are no active lessons today.\n";
+                            foreach ($units as $unit) {
 
+                                $unitCode = $unit->unitCode;
+
+                                //Calculate attendance record for each unit
+                                $details = DB::table('units')
+                                        ->select(DB::raw("
+                                            (SELECT units.unitCode) AS unitCode,
+                                            (SELECT units.description) AS unitName, 
+                                            (SELECT COUNT(*) FROM lessons WHERE unitCode = '$unitCode') AS lessons,
+                                            (SELECT COUNT(*) FROM attendances JOIN lessons ON lessons.lessonId = attendances.lessonId WHERE lessons.unitCode = '$unitCode') AS lessonsAttended,
+
+                                            ((SELECT COUNT(*) FROM attendances JOIN lessons ON lessons.lessonId = attendances.lessonId WHERE lessons.unitCode = '$unitCode') /
+                                            (SELECT COUNT(*) FROM lessons WHERE unitCode = '$unitCode') * 100) AS record"),
+                                        )
+                                        ->join('students', 'students.studyPeriod', '=', 'units.studyPeriod')
+                                        ->join('attendances', 'attendances.studentId', '=', 'students.studentId')
+                                        ->join('lessons', 'lessons.lessonId', '=', 'attendances.lessonId')
+                                        ->where('students.studentId', '=', $studentId)
+                                        ->where('units.unitCode', '=', $unitCode)
+                                        ->distinct()
+                                        ->get();
+
+                                //Fetch the calculations of each unit
+                                foreach ($details as $detail){
+
+                                    $records[] = $detail;//Add them to the records array
+
+                                }
+
+
+                            }
+
+                            //Send the attendance record to the student's email address
+                            $data = [
+                                'records' => $records,
+                                'email' => 'musumbidenis@gmail.com',
+                            ];
+                    
+                            Mail::send('emails.studentAttendance', $data, function($message) use ($data) {
+                                $message->to($data['email'])
+                                        ->subject('Attendance Record');
+                            });
+
+                            
                         }
-
                         
                     }
 
@@ -339,5 +394,61 @@ class USSDController extends Controller
             }
             
         }
+    }
+
+    Public function studentAttendanceMenu($ussd_string_exploded, $phoneNumber)
+    {
+        // Get ussd menu level number from the gateway
+        $level = count($ussd_string_exploded);
+
+        if ($level == 2) {
+
+            echo "CON Enter your admission number in the format, e.g ci/xxxxx/xx";
+
+        }elseif($level == 3){
+
+            //Verify the Student ID
+            $studentId = $ussd_string_exploded[2];
+            $credentials = Student::where('studentId', $studentId)->count();
+
+            //Student record does not exist
+            if ($credentials == 0) {
+
+                echo "END Student ID record does not exist. Contact the system admin for assistance.";
+
+            //Student record exists
+            }else{
+
+                //Verify Phone Number against Student ID
+                $verification = Student::where('studentId', $studentId)->where('phone', $phoneNumber)->count();
+
+                //Not true
+                if ($verification == 0) {
+
+                    echo "END Phone Number is not registered to $studentId. Contact the system admin for assistance.";
+
+                }else{
+
+                    //Check if student has registered for units
+                    $check = DB::table('unitRegistrations')
+                            ->join('units', 'units.unitCode', '=', 'unitRegistrations.unitCode')
+                            ->join('students', 'students.studyPeriod', '=', 'units.studyPeriod')
+                            ->where('students.studentId', '=', $studentId)
+                            ->count();
+                    
+                    //Not registered
+                    if($check == 0 ){
+
+                        //Notify user and display unit registration menu 
+                        echo "END You've not registered for units. Please do so to continue.";
+
+                    }else{
+                        
+                    }
+
+                }
+            }    
+        }
+
     }
 }
