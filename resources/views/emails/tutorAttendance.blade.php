@@ -351,7 +351,7 @@
                     <tr>
                       <td>
                         <p><strong>Hello,  </strong></p>
-                        <p>This is your attendance record.</p>
+                        <p>This is the class attendance record for {{ $unitCode }} - {{ $unitName }}</p>
                         <table class="bg-light body" valign="top" role="presentation" border="0" cellpadding="0" cellspacing="0" style="outline: 0; width: 100%; min-width: 100%; height: 100%; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; font-family: Helvetica, Arial, sans-serif; line-height: 24px; font-weight: normal; font-size: 16px; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; color: #000000; margin: 0; padding: 0; border: 0;" bgcolor="#f7fafc">
                           <tbody>
                             <tr>
@@ -367,8 +367,7 @@
                                                 <table class="table table-striped thead-default table-bordered" border="0" cellpadding="0" cellspacing="0" style="width: 100%; max-width: 100%; border: 1px solid #e2e8f0;">
                                                   <thead>
                                                     <tr>
-                                                      <th style="line-height: 24px; font-size: 16px; margin: 0; padding: 12px; border-color: #e2e8f0; border-style: solid; border-width: 1px 1px 2px;" align="left" valign="top">Unit Code</th>
-                                                      <th style="line-height: 24px; font-size: 16px; margin: 0; padding: 12px; border-color: #e2e8f0; border-style: solid; border-width: 1px 1px 2px;" align="left" valign="top">Unit Name</th>
+                                                      <th style="line-height: 24px; font-size: 16px; margin: 0; padding: 12px; border-color: #e2e8f0; border-style: solid; border-width: 1px 1px 2px;" align="left" valign="top">Student ID</th>
                                                       <th style="line-height: 24px; font-size: 16px; margin: 0; padding: 12px; border-color: #e2e8f0; border-style: solid; border-width: 1px 1px 2px;" align="left" valign="top">Lessons</th>
                                                       <th style="line-height: 24px; font-size: 16px; margin: 0; padding: 12px; border-color: #e2e8f0; border-style: solid; border-width: 1px 1px 2px;" align="left" valign="top">Lessons Attended</th>
                                                       <th style="line-height: 24px; font-size: 16px; margin: 0; padding: 12px; border-color: #e2e8f0; border-style: solid; border-width: 1px 1px 2px;" align="left" valign="top">Percentage</th>
@@ -378,8 +377,7 @@
                                                   <tbody>
                                                     @foreach ($records as $record)
                                                       <tr style="" bgcolor="#f2f2f2">
-                                                        <td style="line-height: 24px; font-size: 16px; margin: 0; padding: 12px; border: 1px solid #e2e8f0;" align="left" valign="top">{{ $record->unitCode }}</td>
-                                                        <td style="line-height: 24px; font-size: 16px; margin: 0; padding: 12px; border: 1px solid #e2e8f0;" align="left" valign="top">{{ $record->unitName }}</td>
+                                                        <td style="line-height: 24px; font-size: 16px; margin: 0; padding: 12px; border: 1px solid #e2e8f0;" align="left" valign="top">{{ $record->studentId }}</td>
                                                         <td style="line-height: 24px; font-size: 16px; margin: 0; padding: 12px; border: 1px solid #e2e8f0;" align="left" valign="top">{{ $record->lessons }}</td>
                                                         <td style="line-height: 24px; font-size: 16px; margin: 0; padding: 12px; border: 1px solid #e2e8f0;" align="left" valign="top">{{ $record->lessonsAttended }}</td>
                                                         <td style="line-height: 24px; font-size: 16px; margin: 0; padding: 12px; border: 1px solid #e2e8f0;" align="left" valign="top">{{ $record->percentage }}</td>
@@ -410,8 +408,6 @@
                         <p>Thanks, <br> 
                            Developer Team.
                         </p>
-                        <p id="val">
-
                         </p>
                       </td>
                     </tr>
