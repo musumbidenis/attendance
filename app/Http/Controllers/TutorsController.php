@@ -102,12 +102,18 @@ class TutorsController extends Controller
     /** Update Tutor details */
     public function updateTutor(Request $request)
     {
+        /** Get input details */
+        $phoneNumber = $request->phone;
+
+        /** Format the phone input */
+        $phoneNumber = (substr($phoneNumber, 0, 2) == '07') ? preg_replace('/^0/','+254', $phoneNumber) : $phoneNumber;
+        $phoneNumber = (substr($phoneNumber, 0, 3) == '254') ? str_replace('254','+254', $phoneNumber) : $phoneNumber;
 
         $tutorId = $request->tutorId;
         $firstname = $request->firstName;
         $surname = $request->surname;
         $email = $request->email;
-        $phone = $request->phone;
+        $phone = $phoneNumber;
         $courseCode = $request->courseCode;
 
        

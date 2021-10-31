@@ -17,9 +17,14 @@ class StudentsController extends Controller
     */
     public function studentsPage(Request $request)
     {
+        $students = DB::table('students')
+                ->select('students.studentId', 'students.firstname', 'students.surname', 'students.email', 'students.phone', 'students.courseCode', 'students.studyPeriod', 'courses.description')
+                ->join('courses', 'courses.courseCode', '=', 'students.courseCode')
+                ->get();
+
         $courses = DB::select('select * from courses');
 
-        return view('pages.students',['courses'=>$courses]);
+        return view('pages.students',['students'=>$students,'courses'=>$courses]);
     }
 
 
@@ -28,13 +33,21 @@ class StudentsController extends Controller
     */
     public function newStudent(Request $request)
     {
+        /** Get input details */
+        $phoneNumber = $request->phone;
+
+        /** Format the phone input */
+        $phoneNumber = (substr($phoneNumber, 0, 2) == '07') ? preg_replace('/^0/','+254', $phoneNumber) : $phoneNumber;
+        $phoneNumber = (substr($phoneNumber, 0, 3) == '254') ? str_replace('254','+254', $phoneNumber) : $phoneNumber;
+
         $student = new Student();
         $student->studentId = $request->studentId;
         $student->firstname = $request->firstName;
         $student->surname = $request->surname;
         $student->email = $request->email;
-        $student->phone = $request->phone;
+        $student->phone = $phoneNumber;
         $student->courseCode = $request->courseCode;
+        $student->studyPeriod = $request->studyPeriod;
 
         try{
             
@@ -84,6 +97,44 @@ class StudentsController extends Controller
            
         return back();
     }
+
+     /** Update Student details */
+     public function updateStudent(Request $request)
+     {
+        /** Get input details */
+        $phoneNumber = $request->phone;
+
+        /** Format the phone input */
+        $phoneNumber = (substr($phoneNumber, 0, 2) == '07') ? preg_replace('/^0/','+254', $phoneNumber) : $phoneNumber;
+        $phoneNumber = (substr($phoneNumber, 0, 3) == '254') ? str_replace('254','+254', $phoneNumber) : $phoneNumber;
+
+        $studentId = $request->studentId;
+        $firstname = $request->firstName;
+        $surname = $request->surname;
+        $email = $request->email;
+        $phone = $phoneNumber;
+        $courseCode = $request->courseCode;
+        $studyPeriod = $request->studyPeriod;
+
+       
+        try{
+           
+            DB::update('UPDATE students SET firstname = ?, surname = ?, email = ?, phone = ?, courseCode = ?, studyPeriod = ? where studentId = ?', [$firstname, $surname, $email, $phone, $courseCode, $studyPeriod, $studentId]);
+
+            Alert::success('Success', 'Update was successful.'); 
+ 
+        } catch(\Illuminate\Database\QueryException $e){
+ 
+            $errorCode = $e->errorInfo[1];
+ 
+            Alert::error('Oops', $e->errorInfo[2])->persistent(true,false);
+             
+        }
+ 
+        return back();
+         
+     }
+ 
 
 }
 

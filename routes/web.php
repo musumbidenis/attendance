@@ -30,6 +30,7 @@ Route::get('getUnits/{courseCode}', 'AcademicsController@getUnits');
 
 Route::post('students/import', 'StudentsController@import');
 Route::post('students/new', 'StudentsController@newStudent');
+Route::post('students/update', 'StudentsController@updateStudent');
 
 Route::post('approve/{tutorId}', 'TutorsController@approve');
 Route::post('tutors/import', 'TutorsController@import');
