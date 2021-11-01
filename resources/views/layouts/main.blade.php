@@ -35,6 +35,7 @@
     <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
     <!-- Control Center for Material Dashboard: parallax effects, scripts  -->
     <script src="../assets/js/material-dashboard.js?v=2.1.2" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
     @yield('scripts')
 </body>
 </html>

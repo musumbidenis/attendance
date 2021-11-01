@@ -78,13 +78,9 @@
                                               <td>{{$student->studyPeriod}}</td>
                                               <td class="text-right">
                                                 <div class="float-right">
-                                                  <form action="" method="post">
-                                                    {{ csrf_field() }}
-                    
-                                                    <button type="submit" class="btn btn-danger btn-link" rel="tooltip" data-placement="bottom" title="Delete">
-                                                      <i class="material-icons">close</i>
-                                                    </button>
-                                                  </form>
+                                                  <button class="btn btn-danger btn-link show_confirm" rel="tooltip" data-placement="bottom" title="Delete">
+                                                    <i class="material-icons">close</i>
+                                                  </button>
                                                 </div>
                                                 <div class="float-right">
                                                   <button id="editButton" class="btn btn-success btn-link" rel="tooltip" data-placement="bottom" title="Edit">
@@ -303,6 +299,57 @@
 <script src="../../assets/js/plugins/jquery.dataTables.min.js"></script>
 <script src="../../assets/js/plugins/jquery.validate.min.js"></script>
 <script src="../../assets/js/plugins/bootstrap-selectpicker.js"></script>
+    <script type="text/javascript">
+      $('.show_confirm').click(function(event) {
+      event.preventDefault();
+
+      swal({
+        title: 'Warning!',
+        text: "Are you sure you want to delete this record?",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      }).then((willDelete) => {
+
+        if (willDelete) {
+
+          $tr = $(this).closest('tr');
+          var data = $tr.children("td").map(function(){
+            return $(this).text();
+          }).get();
+
+          //CORS
+          $.ajaxSetup({
+            headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+          });
+
+          //Ajax request for getting units
+          $.ajax({
+              url: '/students/delete/' + data[0],
+              type: 'post',
+              data: {id: data[0]},
+              success:function(response){
+
+                Swal.fire(
+                  'Deleted!',
+                  'Your record has been deleted.',
+                  'success'
+                  ).then((result) => {
+                  if (result.isConfirmed) {
+
+                    location.reload();
+
+                  }
+                })
+
+              }
+          });
+          }
+      });
+    });
+    </script>
     <script>
       function setFormValidation(id) {
         $(id).validate({

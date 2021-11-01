@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 /* Page Routes */
 Route::middleware(['isLoggedIn'])->group(function () {
 
-    Route::get('dashboard', 'PagesController@dashboard');
+    Route::get('dashboard', 'DashboardController@dashboard');
     Route::get('users/tutors', 'TutorsController@tutorsPage');
     Route::get('users/students', 'StudentsController@studentsPage');
     Route::get('academics/courses', 'AcademicsController@coursesPage');
@@ -31,11 +31,13 @@ Route::get('getUnits/{courseCode}', 'AcademicsController@getUnits');
 Route::post('students/import', 'StudentsController@import');
 Route::post('students/new', 'StudentsController@newStudent');
 Route::post('students/update', 'StudentsController@updateStudent');
+Route::post('students/delete/{id}', 'StudentsController@deleteStudent');
 
 Route::post('approve/{tutorId}', 'TutorsController@approve');
 Route::post('tutors/import', 'TutorsController@import');
 Route::post('tutors/new', 'TutorsController@newTutor');
 Route::post('tutors/update', 'TutorsController@updateTutor');
+Route::post('tutors/delete/{id}', 'TutorsController@deleteTutor');
 
 Route::post('courses/new', 'AcademicsController@newCourse');
 Route::post('courses/update', 'AcademicsController@updateCourse');

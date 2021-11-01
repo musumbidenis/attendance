@@ -16,19 +16,14 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class TutorsController extends Controller
 {
-    /** Fetch Tutors records from DB */
-    public function tutors(Request $request)
-    {
-        $tutors = DB::select('select * from tutors');
-
-        return $tutors->json();
-    }
-
     /** Tutors Page */
     public function tutorsPage(Request $request)
     {
-        $tutors = DB::select('select * from tutors');
         $courses = DB::select('select * from courses');
+        $tutors = DB::table('tutors')
+                ->select('tutors.tutorId', 'tutors.firstname', 'tutors.surname', 'tutors.email', 'tutors.phone', 'tutors.courseCode', 'courses.description')
+                ->join('courses', 'courses.courseCode', '=', 'tutors.courseCode')
+                ->get();
 
         return view('pages.tutors',['tutors'=>$tutors, 'courses'=>$courses]);
     }
@@ -166,6 +161,15 @@ class TutorsController extends Controller
        Alert::success('Success','Approval was succesfull. Login credentials emailed to the tutor.');
        return back();
         
+    }
+
+    public function deleteTutor($id)
+    {
+
+        Tutor::where('tutorId', $id)->delete();
+
+        return response()->json('Success');
+
     }
 
 }

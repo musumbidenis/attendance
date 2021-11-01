@@ -165,6 +165,7 @@ class USSDController extends Controller
                             ->distinct()
                             ->get();
 
+                    $records = array();
                     //Fetch the calculations of each unit
                     foreach ($details as $detail){
 
@@ -175,18 +176,12 @@ class USSDController extends Controller
 
                 }
 
-                foreach ($records as $record){//Get unitCode and unitName to display on email
-
-                    $unitCode = $record->unitCode;
-                    $unitName = $record->unitName;
-
-                }
 
                 //Send the attendance record to the Tutor's email address
                 $data = [
                     'records' => $records,
-                    'unitCode' => $unitCode,
-                    'unitName' => $unitName,
+                    'unitCode' => $units[$ussd_string_exploded[3]-1]->unitCode,
+                    'unitName' => $units[$ussd_string_exploded[3]-1]->description,
                     'email' => 'musumbidenis@gmail.com',
                 ];
         
@@ -195,7 +190,7 @@ class USSDController extends Controller
                             ->subject('Attendance Record');
                 });
 
-                echo "END Your class attendance record has been sent to you registered email.";
+                echo "END Your class attendance record has been sent to your registered email.";
             }
 
         }elseif($level == 5){
@@ -275,7 +270,7 @@ class USSDController extends Controller
 
             if ($ussd_string_exploded[1] == '1' || $ussd_string_exploded[1] == '2') {
                 
-                echo "CON Enter your admission number in the format, e.g ci/xxxxx/xx";
+                echo "CON Enter your admission number in the format, e.g ci00026017";
 
             }else{
 

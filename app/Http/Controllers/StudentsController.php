@@ -52,7 +52,7 @@ class StudentsController extends Controller
         try{
             
             $student->save();
-            Alert::success('Student record inserted successfully');
+            Alert::success('Success', 'Student record inserted successfully');
 
         } catch(\Illuminate\Database\QueryException $e){
 
@@ -134,7 +134,15 @@ class StudentsController extends Controller
         return back();
          
      }
+
+    public function deleteStudent($id)
+    {
  
+        Student::where('studentId', $id)->delete();
+ 
+        return response()->json('Success');
+ 
+    }
 
 }
 
